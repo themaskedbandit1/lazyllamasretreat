@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lazy Llama's Retreat🦙🌿</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #f3efe5;
+      color: #333;
+      padding: 2rem;
+      line-height: 1.6;
+      background-image: url('https://i.imgur.com/mDMdseW.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      transition: background 0.5s ease;
+    }
+
+    .night {
+      background-color: #1f1f1f;
+      background-image: url('https://i.imgur.com/Sh2lqDr.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #e0e0e0;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background 0.5s ease;
+    }
+
+    .night .container {
+      background: rgba(30, 30, 30, 0.85);
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #4b3f28;
+    }
+
+    .night h1 {
+      color: #ffebcd;
+    }
+
+    p {
+      font-size: 1.2rem;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin: 1.5rem auto;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li a {
+      text-decoration: none;
+      color: #4b3f28;
+      font-weight: bold;
+      display: block;
+      margin: 0.5rem 0;
+      transition: color 0.3s;
+    }
+
+    .night li a {
+      color: #ffe4b5;
+    }
+
+    li a:hover {
+      color: #7b5e3b;
+    }
+
+    /* Modal styles */
+    #audioModal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    #audioModal.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-box button, .night-toggle {
+      padding: 0.6rem 1.2rem;
+      background-color: #4b3f28;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Retreat🌸</h1>
+    <p>You have landed in a hidden nook of the internet, the den of none other than the Lazy Llama, herself. This is a place of silliness, great intellectualism and wisdom... The Lazy Llama occassionally resides in this retreat, kitten in lap and munching on instant noodles as she browses through her daily mail of youtube shorts.</p>
+    <p>In this place of rest and celebration, you will find a healing potion, character sheet, llama package, and an adorably silly and wise old lady.</p>
+    <img src="https://raw.githubusercontent.com/themaskedbandit1/mellington-care-den/e63b4efabfedf419a6c80fc687ba0faa55d12a3a/A_traditional_painting%2C_likely_created_with_oil_or.png.png" alt="Forest Grove Entry">
+    <p>Scroll slowly. Take your time. Breathe deeply. You are safe here. This is your retreat to do whatever you wish with. </p>
+
+    <p class="section-title">Explore:</p>
+    <ul>
+      <li><a href="healingpotion.html">Healing Potion</a></li>
+      <li><a href="llamaprofile.html">Llama Profile</a></li>
+      <li><a href="llbdaypackage.html">Lazy Llama Birthday Package</a></li>
+      <li><a href="leapllama.html">Leapllama</a></li>
+      <li><a href="journal.html">Journal Yo Shit Girl!</a></li>
+      <li><a href="credits.html">Credits</a></li>
+    </ul>
+
+    <button class="night-toggle" onclick="toggleNightMode()">🌙 Toggle Night Mode</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="audioModal">
+    <div class="modal-box">
+      <h2>Welcome to the Retreat 🌿</h2>
+      <p>Would you like to enter the Lazy Llama Retreat?</p>
+      <button onclick="playForestAudio()">Enter Retreat 🌲</button>
+    </div>
+  </div>
+
+  <audio id="forestAudio" loop>
+    <source src="https://raw.githubusercontent.com/themaskedbandit1/mellington-care-den/e63b4efabfedf419a6c80fc687ba0faa55d12a3a/autumn-morning-woodland-with-birdsong-and-distant-waterfall-173326.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.onload = function () {
+      document.getElementById('audioModal').classList.add('show');
+    };
+
+    function playForestAudio() {
+      const modal = document.getElementById('audioModal');
+      const audio = document.getElementById('forestAudio');
+      audio.play();
+      modal.classList.remove('show');
+    }
+
+    function toggleNightMode() {
+      document.body.classList.toggle('night');
+    }
+  </script>
+</body>
+</html>
