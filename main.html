@@ -138,7 +138,10 @@
     <h1>Welcome to the Retreat🌸</h1>
     <p>You have landed in a hidden nook of the internet, the den of none other than the Lazy Llama, herself. This is a place of silliness, great intellectualism and wisdom... The Lazy Llama occassionally resides in this retreat, kitten in lap and munching on instant noodles as she browses through her daily mail of youtube shorts.</p>
     <p>In this place of rest and celebration, you will find a healing potion, character sheet, llama package, and an adorably silly and wise old lady.</p>
-    <img src="https://raw.githubusercontent.com/themaskedbandit1/lazyllamasretreat/0c922a8d80b899507f13bbd311c92cc4604cd5b6/3b5ac1f0-b79a-4cd3-8fe9-8acaf79a49b3.png" alt="Forest Grove Entry">
+
+    <!-- Image with ID for switching -->
+    <img id="forestImage" src="https://raw.githubusercontent.com/themaskedbandit1/lazyllamasretreat/0c922a8d80b899507f13bbd311c92cc4604cd5b6/3b5ac1f0-b79a-4cd3-8fe9-8acaf79a49b3.png" alt="Forest Grove Entry">
+
     <p>Scroll slowly. Take your time. Breathe deeply. You are safe here. This is your retreat to do whatever you wish with. </p>
 
     <p class="section-title">Explore:</p>
@@ -180,7 +183,16 @@
     }
 
     function toggleNightMode() {
-      document.body.classList.toggle('night');
+      const body = document.body;
+      const image = document.getElementById('forestImage');
+
+      body.classList.toggle('night');
+
+      if (body.classList.contains('night')) {
+        image.src = "https://raw.githubusercontent.com/themaskedbandit1/lazyllamasretreat/8db611e5320bde1e4019a5be66f781bfb8afa7f3/ChatGPT%20Image%20Jul%2019,%202025,%2002_29_32%20PM.png";
+      } else {
+        image.src = "https://raw.githubusercontent.com/themaskedbandit1/lazyllamasretreat/0c922a8d80b899507f13bbd311c92cc4604cd5b6/3b5ac1f0-b79a-4cd3-8fe9-8acaf79a49b3.png";
+      }
     }
   </script>
 </body>
