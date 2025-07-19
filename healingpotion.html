@@ -696,11 +696,10 @@
       <header>
         <h1>Healing Potion 💜</h1>
         <div class="audio-player">
-          <!-- Hidden YouTube iframe for audio -->
-          <div id="youtube-player" style="position: absolute; z-index: -1; opacity: 0; pointer-events: none;">
-            <iframe id="youtube-iframe" width="1" height="1" src="about:blank" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
-          <!-- Custom controls for YouTube audio -->
+          <audio id="page-audio" loop preload="auto">
+            <source src="https://github.com/themaskedbandit1/lazyllamasretreat/raw/refs/heads/main/Cry%20-%20Cigarettes%20After%20Sex.mp3" type="audio/mpeg">
+            Your browser doesn't support HTML5 audio.
+          </audio>
           <div class="player-controls">
             <button id="play-pause-btn" class="audio-control">
               <i class="fas fa-play"></i>
@@ -847,19 +846,6 @@
         
         // Initialize volume
         let currentVolume = volumeSlider.value;
-        
-        // Function to initialize YouTube player
-        function initializeYouTubePlayer() {
-            // Load the YouTube video with autoplay and loop
-            youtubeIframe.src = "https://www.youtube.com/embed/tX5GpicCZLE?enablejsapi=1&autoplay=1&loop=1&playlist=tX5GpicCZLE&origin=" + window.location.origin;
-            
-            // Create the YouTube player when iframe is loaded
-            youtubeIframe.onload = function() {
-                youtubePlayer = new YT.Player('youtube-iframe', {
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
                 });
             };
         }
