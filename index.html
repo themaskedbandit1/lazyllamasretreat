@@ -1,61 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday, Laila!</title>
-    <style>
-        body {
-            background-image: url('https://raw.githubusercontent.com/themaskedbandit1/lazyllamasretreat/f1ca6b2d1c1403932667a229bf50ba6c555b1662/Screenshot%202025-07-19%20131824.png');
-            background-size: cover;  /* Ensures it covers the entire screen */
-            background-position: center;  /* Centers the image */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            height: 100vh; /* Ensures the background fills the full viewport height */
-            margin: 0; /* Removes default margin */
-            display: flex; /* Allows you to center content */
-            justify-content: center; /* Centers content horizontally */
-            align-items: center; /* Centers content vertically */
-            color: white;
-        }
-        h1 {
-            color: #ff4081;
-        }
-        .button {
-            padding: 15px 30px;
-            font-size: 18px;
-            color: white;
-            background-color: #6200ea;
-            border: none;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .button:hover {
-            background-color: #3700b3;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, Laila!</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: white;
+    }
+
+    .layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    .image-side {
+      flex: 1;
+      background-image: url('https://raw.githubusercontent.com/themaskedbandit1/lazyllamasretreat/f1ca6b2d1c1403932667a229bf50ba6c555b1662/Screenshot%202025-07-19%20131824.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .text-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff4081;
+      margin-bottom: 10px;
+    }
+
+    .button {
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      background-color: #6200ea;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 40px;
+    }
+
+    .button:hover {
+      background-color: #3700b3;
+    }
+
+    .bottom-button {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #222;
+      padding: 30px 40px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    .enter-btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 16px;
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .enter-btn:hover {
+      background-color: #d81b60;
+    }
+  </style>
 </head>
 <body>
 
+<div class="modal" id="entryModal">
+  <div class="modal-content">
+    <h2>Welcome 🎉</h2>
+    <p>Enter site?</p>
+    <button class="enter-btn" onclick="startSite()">Enter</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="image-side"></div>
+  <div class="text-side">
     <h1>🎉 Happy Birthday, Laila! 🎉</h1>
     <p>I know the year has been tough so far for you, so I hope this can sprinkle a little sunshine on your day</p>
     <p>The way you always sprinkle your sunshine on my days</p>
     <p>P.S. I love you.</p>
     <p>P.P.S. Nothing else, I just wanted to say P.P.</p>
+    <a href="https://themaskedbandit1.github.io/main" class="button bottom-button">Main Site</a>
+  </div>
+</div>
 
-    <a href="https://themaskedbandit1.github.io/main" class="button">Main Site</a>
-    <audio autoplay>
-        <source src="https://github.com/themaskedbandit1/lazyllamasretreat/raw/refs/heads/main/Iframe%20PSY%20-%20GANGNAM%20STYLE%20(Lyrics)%20%5BrsdRekJzcMg%5D.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
+<audio id="birthdayAudio">
+  <source src="https://github.com/themaskedbandit1/lazyllamasretreat/raw/refs/heads/main/Iframe%20PSY%20-%20GANGNAM%20STYLE%20(Lyrics)%20%5BrsdRekJzcMg%5D.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  function startSite() {
+    document.getElementById('entryModal').style.display = 'none';
+    const audio = document.getElementById('birthdayAudio');
+    audio.play().catch(err => {
+      alert('Music playback failed. Please interact with the page again.');
+    });
+  }
+</script>
 
 </body>
 </html>
+
