@@ -820,19 +820,51 @@
     </div>
   </div>
 
-  <!-- YouTube API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
+
   
   <script>
-    // YouTube Player reference
-    let youtubePlayer;
-    let isPlaying = false;
-    
-    // YouTube API callback
-    function onYouTubeIframeAPIReady() {
-      console.log("YouTube API Ready");
-      // The player is created but not loaded until user interaction
+
+    <script>
+  document.getElementById('welcome-button').addEventListener('click', function () {
+    document.getElementById('welcome-popup').style.display = 'none';
+    document.getElementById('main-content').classList.remove('hidden');
+
+    // Optional: autoplay the audio when the popup closes
+    const audio = document.getElementById('page-audio');
+    const playBtnIcon = document.querySelector('#play-pause-btn i');
+
+    audio.play().then(() => {
+      playBtnIcon.classList.remove('fa-play');
+      playBtnIcon.classList.add('fa-pause');
+    }).catch((e) => {
+      // Autoplay might be blocked—no big deal
+      console.log('Autoplay blocked:', e);
+    });
+  });
+
+  // Handle play/pause button
+  document.getElementById('play-pause-btn').addEventListener('click', function () {
+    const audio = document.getElementById('page-audio');
+    const icon = this.querySelector('i');
+
+    if (audio.paused) {
+      audio.play();
+      icon.classList.remove('fa-play');
+      icon.classList.add('fa-pause');
+    } else {
+      audio.pause();
+      icon.classList.remove('fa-pause');
+      icon.classList.add('fa-play');
     }
+  });
+
+  // Handle volume slider
+  document.getElementById('volume-slider').addEventListener('input', function () {
+    const audio = document.getElementById('page-audio');
+    audio.volume = this.value;
+  });
+</script>
+
     
     document.addEventListener('DOMContentLoaded', function() {
         // Elements
