@@ -388,7 +388,7 @@
     .certificate-content {
       padding: 40px 30px;
       border: 3px solid #be8abf;
-      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%237b1fa2' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"), 
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%23be8abf' fill-opacity='0.1'/%3E%3C/svg%3E"),
                    linear-gradient(135deg, var(--certificate-bg) 0%, #fff8e1 100%);
       position: relative;
       transition: all 0.3s ease;
@@ -411,7 +411,7 @@
       font-size: 2.5rem;
       font-family: 'Dancing Script', cursive;
       color: var(--primary-color);
-      margin: 0 0 0 80px; /* Added left margin to avoid overlap with seal */
+      margin: 0 0 0 80px;
       text-transform: uppercase;
       letter-spacing: 3px;
       text-shadow: 1px 1px 1px rgba(123, 31, 162, 0.3);
@@ -427,10 +427,10 @@
       width: 80px;
       height: 80px;
       filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
-      animation: pulse 2s infinite;
+      animation: certificatePulse 2s infinite;
     }
     
-    @keyframes pulse {
+    @keyframes certificatePulse {
       0% {
         transform: scale(1);
       }
@@ -503,7 +503,7 @@
     }
     
     .certificate-signature::after {
-      content: 'April 27, 2025';
+      content: 'July 19, 2025';
       position: absolute;
       font-family: 'Dancing Script', cursive;
       font-size: 1.1rem;
@@ -541,6 +541,13 @@
       background-color: var(--secondary-color);
       transform: scale(1.03);
     }
+    
+    .bingo div.marked {
+      background-color: var(--accent-color);
+      color: white;
+      transform: scale(0.95);
+    }
+    
     /* Back to Lobby Button */
     .lobby-button {
       display: inline-block;
@@ -609,11 +616,20 @@
       
       .certificate-header h3 {
         font-size: 2rem;
+        margin: 0;
       }
       
       .seal {
         width: 60px;
         height: 60px;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 10px;
+      }
+      
+      .certificate-header {
+        flex-direction: column;
       }
       
       .certificate-recipient {
@@ -659,17 +675,6 @@
         width: 120px;
       }
       
-      .seal {
-        position: relative;
-        top: 0;
-        left: 0;
-        margin-right: 10px;
-      }
-      
-      .certificate-header {
-        flex-direction: column;
-      }
-      
       .popup-content {
         padding: 20px;
       }
@@ -713,7 +718,7 @@
       </header>
 
       <section class="healing-section">
-        <h2>Talismas for Wounds She's Healing From 🪄</h2>
+        <h2>Talismans for Wounds She's Healing From 🪄</h2>
         <div class="charms">
           <div class="charm">
             <div class="charm-symbol">❤️</div>
@@ -810,6 +815,7 @@
           <div>Acted way too humble about something amazing I did</div>
         </div>
       </section>
+      
       <!-- Back to Lobby Button -->
       <div style="text-align: center; margin: 1rem 0;">
         <a href="main.html" class="lobby-button">
@@ -820,171 +826,68 @@
     </div>
   </div>
 
-
-  
   <script>
+    // Welcome popup functionality
+    document.getElementById('welcome-button').addEventListener('click', function () {
+      document.getElementById('welcome-popup').style.display = 'none';
+      document.getElementById('main-content').classList.remove('hidden');
 
-    <script>
-  document.getElementById('welcome-button').addEventListener('click', function () {
-    document.getElementById('welcome-popup').style.display = 'none';
-    document.getElementById('main-content').classList.remove('hidden');
+      // Optional: autoplay the audio when the popup closes
+      const audio = document.getElementById('page-audio');
+      const playBtnIcon = document.querySelector('#play-pause-btn i');
 
-    // Optional: autoplay the audio when the popup closes
-    const audio = document.getElementById('page-audio');
-    const playBtnIcon = document.querySelector('#play-pause-btn i');
-
-    audio.play().then(() => {
-      playBtnIcon.classList.remove('fa-play');
-      playBtnIcon.classList.add('fa-pause');
-    }).catch((e) => {
-      // Autoplay might be blocked—no big deal
-      console.log('Autoplay blocked:', e);
+      audio.play().then(() => {
+        playBtnIcon.classList.remove('fa-play');
+        playBtnIcon.classList.add('fa-pause');
+      }).catch((e) => {
+        // Autoplay might be blocked—no big deal
+        console.log('Autoplay blocked:', e);
+      });
     });
-  });
 
-  // Handle play/pause button
-  document.getElementById('play-pause-btn').addEventListener('click', function () {
-    const audio = document.getElementById('page-audio');
-    const icon = this.querySelector('i');
+    // Handle play/pause button
+    document.getElementById('play-pause-btn').addEventListener('click', function () {
+      const audio = document.getElementById('page-audio');
+      const icon = this.querySelector('i');
 
-    if (audio.paused) {
-      audio.play();
-      icon.classList.remove('fa-play');
-      icon.classList.add('fa-pause');
-    } else {
-      audio.pause();
-      icon.classList.remove('fa-pause');
-      icon.classList.add('fa-play');
-    }
-  });
+      if (audio.paused) {
+        audio.play();
+        icon.classList.remove('fa-play');
+        icon.classList.add('fa-pause');
+      } else {
+        audio.pause();
+        icon.classList.remove('fa-pause');
+        icon.classList.add('fa-play');
+      }
+    });
 
-  // Handle volume slider
-  document.getElementById('volume-slider').addEventListener('input', function () {
-    const audio = document.getElementById('page-audio');
-    audio.volume = this.value;
-  });
-</script>
+    // Handle volume slider
+    document.getElementById('volume-slider').addEventListener('input', function () {
+      const audio = document.getElementById('page-audio');
+      audio.volume = this.value;
+    });
 
-    
+    // Bingo board interactivity - mark squares when clicked
     document.addEventListener('DOMContentLoaded', function() {
-        // Elements
-        const welcomePopup = document.getElementById('welcome-popup');
-        const welcomeButton = document.getElementById('welcome-button');
-        const mainContent = document.getElementById('main-content');
-        const youtubeIframe = document.getElementById('youtube-iframe');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const volumeSlider = document.getElementById('volume-slider');
-        const bingoSquares = document.querySelectorAll('.bingo div');
-        
-        // Initialize volume
-        let currentVolume = volumeSlider.value;
-                });
-            };
-        }
-        
-        // YouTube player ready event
-        function onPlayerReady(event) {
-            console.log("YouTube Player Ready");
-            // Set volume based on slider
-            event.target.setVolume(currentVolume * 100);
-            
-            // Start playing when welcomed
-            if (isPlaying) {
-                event.target.playVideo();
-            }
-        }
-        
-        // YouTube player state change event
-        function onPlayerStateChange(event) {
-            // Update play/pause button based on player state
-            if (event.data === YT.PlayerState.PLAYING) {
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-            }
-        }
-        
-        // Function to toggle play/pause
-        function togglePlayPause() {
-            if (youtubePlayer && youtubePlayer.getPlayerState) {
-                const state = youtubePlayer.getPlayerState();
-                
-                if (state === YT.PlayerState.PLAYING) {
-                    youtubePlayer.pauseVideo();
-                    isPlaying = false;
-                } else {
-                    youtubePlayer.playVideo();
-                    isPlaying = true;
-                }
-            }
-        }
-        
-        // Welcome popup handling
-        welcomeButton.addEventListener('click', function() {
-            welcomePopup.style.display = 'none';
-            mainContent.classList.remove('hidden');
-            
-            // Initialize YouTube player on first interaction
-            initializeYouTubePlayer();
-            isPlaying = true;
+      const bingoSquares = document.querySelectorAll('.bingo div');
+      
+      bingoSquares.forEach(square => {
+        square.addEventListener('click', function() {
+          this.classList.toggle('marked');
         });
-        
-        // Audio player controls
-        playPauseBtn.addEventListener('click', togglePlayPause);
-        
-        // Volume control
-        volumeSlider.addEventListener('input', function() {
-            currentVolume = this.value;
-            if (youtubePlayer && youtubePlayer.setVolume) {
-                youtubePlayer.setVolume(currentVolume * 100);
-            }
+      });
+
+      // Charm click effects
+      const charms = document.querySelectorAll('.charm');
+      charms.forEach(charm => {
+        charm.addEventListener('click', function() {
+          // Add a temporary sparkle effect
+          this.style.transform = 'translateY(-15px) rotate(10deg) scale(1.1)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 300);
         });
-        
-        // Bingo card functionality
-        bingoSquares.forEach(square => {
-            square.addEventListener('click', function() {
-                this.classList.toggle('selected');
-                if (this.classList.contains('selected')) {
-                    this.style.backgroundColor = '#f3e5f5';
-                    this.style.border = '2px solid #7b1fa2';
-                    this.style.fontWeight = 'bold';
-                } else {
-                    this.style.backgroundColor = 'white';
-                    this.style.border = '2px solid #7b1fa2';
-                    this.style.fontWeight = 'normal';
-                }
-            });
-        });
-        
-        // Add rotating animation to talismans (charms)
-        const charms = document.querySelectorAll('.charm');
-        charms.forEach((charm, index) => {
-            // Add floating animation
-            charm.style.animation = `float 3s ease-in-out ${index * 0.2}s infinite`;
-            
-            // Add a subtle hover effect with glow
-            charm.addEventListener('mouseenter', function() {
-                this.style.boxShadow = '0 0 20px rgba(123, 31, 162, 0.4)';
-            });
-            
-            charm.addEventListener('mouseleave', function() {
-                this.style.boxShadow = 'var(--box-shadow)';
-            });
-        });
-        
-        // Enhanced certificate effects
-        const certificateSection = document.querySelector('.certificate');
-        
-        certificateSection.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.02) rotateX(2deg)';
-            this.style.transition = 'all 0.4s ease';
-            this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.25)';
-        });
-        
-        certificateSection.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1) rotateX(0)';
-            this.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.2)';
-        });
+      });
     });
   </script>
 </body>
