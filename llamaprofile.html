@@ -962,8 +962,6 @@
         function playThemeMusic() {
             themeAudio = document.getElementById('themeAudio');
             
-            // If you have the Modern Family theme song file, uncomment and modify this:
-            /*
             themeAudio.innerHTML = '<source src="Modern Family Main Theme.mp3" type="audio/mpeg">';
             themeAudio.load();
             
@@ -971,54 +969,8 @@
                 console.log('Theme music started playing');
             }).catch((error) => {
                 console.log('Audio playback failed:', error);
-                // Fallback to generated welcome melody
-                playWelcomeMelody();
+
             });
-            */
-            
-            // For now, play a welcome melody since we don't have the MP3 file
-            playWelcomeMelody();
-        }
-        
-        // Play a generated welcome melody as fallback
-        function playWelcomeMelody() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // Welcome melody (like a spy theme)
-                const melody = [
-                    {freq: 220, duration: 0.4}, // A
-                    {freq: 277, duration: 0.4}, // C#
-                    {freq: 330, duration: 0.4}, // E
-                    {freq: 440, duration: 0.6}, // A
-                    {freq: 554, duration: 0.4}, // C#
-                    {freq: 659, duration: 0.8}, // E
-                ];
-                
-                let currentTime = 0;
-                melody.forEach((note, index) => {
-                    setTimeout(() => {
-                        const oscillator = audioCtx.createOscillator();
-                        const gainNode = audioCtx.createGain();
-                        
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioCtx.destination);
-                        
-                        oscillator.frequency.setValueAtTime(note.freq, audioCtx.currentTime);
-                        oscillator.type = 'triangle';
-                        
-                        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + note.duration);
-                        
-                        oscillator.start(audioCtx.currentTime);
-                        oscillator.stop(audioCtx.currentTime + note.duration);
-                    }, currentTime * 1000);
-                    
-                    currentTime += note.duration;
-                });
-            } catch (error) {
-                console.log('Audio not available');
-            }
         }
 
         // Initialize spy effects on page load
