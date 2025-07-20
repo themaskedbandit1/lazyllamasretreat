@@ -244,9 +244,21 @@
             llama.isJumping = true;
             llama.jumpProgress = 0;
             
-            const jumpDistance = 150 + Math.random() * 50;
-            llama.targetX = llama.x + Math.cos(gameData.arrow.angle) * jumpDistance;
-            llama.targetY = llama.y + Math.sin(gameData.arrow.angle) * jumpDistance;
+            // Check if arrow is pointing toward a hay bale
+            const targetHayBale = findTargetHayBale();
+            
+            if (targetHayBale) {
+                // If pointing at a hay bale, jump toward it with some variation
+                const baseX = targetHayBale.x + targetHayBale.width/2 - llama.width/2;
+                const baseY = targetHayBale.y - llama.height;
+                llama.targetX = baseX + (Math.random() - 0.5) * 60; // Add some randomness
+                llama.targetY = baseY + (Math.random() - 0.5) * 40;
+            } else {
+                // Jump in arrow direction
+                const jumpDistance = 180 + Math.random() * 40;
+                llama.targetX = llama.x + Math.cos(gameData.arrow.angle) * jumpDistance;
+                llama.targetY = llama.y + Math.sin(gameData.arrow.angle) * jumpDistance;
+            }
             
             // Add jump particles
             for (let i = 0; i < 8; i++) {
@@ -260,6 +272,55 @@
                     size: Math.random() * 3 + 1
                 });
             }
+        }
+        
+        function findTargetHayBale() {
+            const llamaCenter = {
+                x: llama.x + llama.width / 2,
+                y: llama.y + llama.height / 2
+            };
+            
+            let bestTarget = null;
+            let bestAngleDiff = Infinity;
+            
+            gameData.hayBales.forEach((hayBale, index) => {
+                if (index === 0 || hayBale.visited) return; // Skip starting hay bale and visited ones
+                
+                const hayBaleCenter = {
+                    x: hayBale.x + hayBale.width / 2,
+                    y: hayBale.y + hayBale.height / 2
+                };
+                
+                // Calculate angle from llama to this hay bale
+                const angleToHayBale = Math.atan2(
+                    hayBaleCenter.y - llamaCenter.y,
+                    hayBaleCenter.x - llamaCenter.x
+                );
+                
+                // Calculate the difference between arrow angle and hay bale angle
+                let angleDiff = Math.abs(gameData.arrow.angle - angleToHayBale);
+                
+                // Handle angle wrapping (shortest distance between angles)
+                if (angleDiff > Math.PI) {
+                    angleDiff = 2 * Math.PI - angleDiff;
+                }
+                
+                // Check distance to make sure hay bale is reachable
+                const distance = Math.sqrt(
+                    Math.pow(hayBaleCenter.x - llamaCenter.x, 2) +
+                    Math.pow(hayBaleCenter.y - llamaCenter.y, 2)
+                );
+                
+                // More generous angle tolerance - about 25 degrees
+                if (angleDiff < 0.44 && distance < 300 && distance > 80) {
+                    if (angleDiff < bestAngleDiff) {
+                        bestAngleDiff = angleDiff;
+                        bestTarget = hayBale;
+                    }
+                }
+            });
+            
+            return bestTarget;
         }
         
         function startGame() {
@@ -311,6 +372,7 @@
             });
             
             const patterns = [
+                // Level 1: Easy horizontal path
                 [
                     { x: 250, y: 320 },
                     { x: 450, y: 280 },
@@ -318,6 +380,7 @@
                     { x: 850, y: 300 },
                     { x: 1050, y: 260 }
                 ],
+                // Level 2: Zigzag pattern
                 [
                     { x: 280, y: 380 },
                     { x: 480, y: 250 },
@@ -325,24 +388,65 @@
                     { x: 880, y: 220 },
                     { x: 1080, y: 360 }
                 ],
+                // Level 3: Mountain climb
                 [
                     { x: 300, y: 350 },
                     { x: 500, y: 280 },
-                    { x: 700, y: 250 },
-                    { x: 900, y: 280 },
-                    { x: 1100, y: 350 }
+                    { x: 700, y: 200 },
+                    { x: 900, y: 180 },
+                    { x: 1100, y: 150 }
+                ],
+                // Level 4: Valley dive
+                [
+                    { x: 280, y: 200 },
+                    { x: 480, y: 320 },
+                    { x: 680, y: 400 },
+                    { x: 880, y: 350 },
+                    { x: 1080, y: 220 }
+                ],
+                // Level 5: Spiral challenge
+                [
+                    { x: 250, y: 300 },
+                    { x: 400, y: 200 },
+                    { x: 600, y: 300 },
+                    { x: 800, y: 400 },
+                    { x: 1000, y: 250 },
+                    { x: 1200, y: 350 }
+                ],
+                // Level 6: High precision jumps
+                [
+                    { x: 320, y: 180 },
+                    { x: 520, y: 160 },
+                    { x: 720, y: 140 },
+                    { x: 920, y: 120 },
+                    { x: 1120, y: 100 }
+                ],
+                // Level 7: Long distance challenge
+                [
+                    { x: 350, y: 350 },
+                    { x: 650, y: 200 },
+                    { x: 950, y: 380 },
+                    { x: 1250, y: 180 },
+                    { x: 1550, y: 320 }
                 ]
             ];
             
-            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            // Use level to determine pattern, cycling through available patterns
+            const patternIndex = (level - 1) % patterns.length;
+            const pattern = patterns[patternIndex];
+            
+            // Add some randomness based on level for difficulty scaling
+            const levelDifficulty = Math.min(level, 10);
+            const sizeVariation = 30 - (levelDifficulty * 2); // Smaller hay bales at higher levels
+            const positionVariation = 20 + (levelDifficulty * 5); // More position variation at higher levels
             
             pattern.forEach(pos => {
                 gameData.hayBales.push({
                     id: gameData.nextHayBaleId++,
-                    x: pos.x,
-                    y: pos.y,
-                    width: 80 + Math.random() * 30,
-                    height: 50 + Math.random() * 20,
+                    x: pos.x + (Math.random() - 0.5) * positionVariation,
+                    y: pos.y + (Math.random() - 0.5) * (positionVariation / 2),
+                    width: Math.max(60, 80 + Math.random() * sizeVariation),
+                    height: Math.max(40, 50 + Math.random() * (sizeVariation / 2)),
                     visited: false
                 });
             });
@@ -379,7 +483,7 @@
                             Math.pow(llama.y + llama.height - hayBale.y, 2)
                         );
                         
-                        if (distance < 50 && !hayBale.visited) {
+                        if (distance < 140 && !hayBale.visited) {
                             landedOnHayBale = true;
                             landedHayBale = hayBale;
                             hayBale.visited = true;
@@ -603,14 +707,37 @@
             const circleRadius = 60;
             const arrowLength = 50;
             
-            // Draw circle around llama
-            ctx.strokeStyle = 'rgba(255, 68, 68, 0.6)';
+            // Check if arrow is pointing at a valid target
+            const targetHayBale = findTargetHayBale();
+            const isTargeting = targetHayBale !== null;
+            
+            // Draw circle around llama (green when targeting, red when not)
+            ctx.strokeStyle = isTargeting ? 'rgba(34, 139, 34, 0.8)' : 'rgba(255, 68, 68, 0.6)';
             ctx.lineWidth = 3;
             ctx.setLineDash([5, 5]);
             ctx.beginPath();
             ctx.arc(centerX, centerY, circleRadius, 0, Math.PI * 2);
             ctx.stroke();
             ctx.setLineDash([]);
+            
+            // Highlight the target hay bale if one is being targeted
+            if (isTargeting && targetHayBale) {
+                ctx.strokeStyle = '#00FF00';
+                ctx.lineWidth = 4;
+                ctx.setLineDash([8, 8]);
+                ctx.strokeRect(targetHayBale.x - 4, targetHayBale.y - 4, targetHayBale.width + 8, targetHayBale.height + 8);
+                ctx.setLineDash([]);
+                
+                // Draw a line from llama to target for debugging
+                ctx.strokeStyle = '#00FF00';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(targetHayBale.x + targetHayBale.width/2, targetHayBale.y + targetHayBale.height/2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
             
             // Calculate arrow position on circle
             const arrowX = centerX + Math.cos(gameData.arrow.angle) * circleRadius;
@@ -620,8 +747,8 @@
             ctx.translate(arrowX, arrowY);
             ctx.rotate(gameData.arrow.angle);
             
-            // Arrow shaft
-            ctx.strokeStyle = '#FF4444';
+            // Arrow shaft (green when targeting, red when not)
+            ctx.strokeStyle = isTargeting ? '#22AA22' : '#FF4444';
             ctx.lineWidth = 4;
             ctx.beginPath();
             ctx.moveTo(0, 0);
@@ -629,7 +756,7 @@
             ctx.stroke();
             
             // Arrow head
-            ctx.fillStyle = '#FF4444';
+            ctx.fillStyle = isTargeting ? '#22AA22' : '#FF4444';
             ctx.beginPath();
             ctx.moveTo(arrowLength, 0);
             ctx.lineTo(arrowLength - 12, -6);
@@ -642,7 +769,7 @@
             ctx.beginPath();
             ctx.arc(0, 0, 6, 0, Math.PI * 2);
             ctx.fill();
-            ctx.strokeStyle = '#FF4444';
+            ctx.strokeStyle = isTargeting ? '#22AA22' : '#FF4444';
             ctx.lineWidth = 2;
             ctx.stroke();
             
