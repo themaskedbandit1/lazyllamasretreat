@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leap Llama Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+        }
+        
+        #gameCanvas {
+            display: block;
+            cursor: pointer;
+        }
+        
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.6);
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        
+        .level {
+            position: absolute;
+            top: 20px;
+            left: 200px;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.6);
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+        
+        .instructions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            text-align: right;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 250px;
+        }
+        
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+        }
+        
+        .screen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        
+        .screen h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+            text-align: center;
+        }
+        
+        .screen p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 500px;
+        }
+        
+        .screen button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .screen button:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        
+        .restart-button {
+            background: #4ecdc4 !important;
+            padding: 15px 30px !important;
+            font-size: 18px !important;
+        }
+        
+        .restart-button:hover {
+            background: #26a69a !important;
+        }
+        
+        .emoji {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="ui-overlay">
+        <div class="score" id="score">Score: 0</div>
+        <div class="level" id="level">Level: 1</div>
+        
+        <div class="instructions" id="instructions">
+            <strong>How to Play:</strong><br />
+            Watch the spinning arrow<br />
+            Click when it points toward a hay bale<br />
+            <br />
+            <strong>Controls:</strong><br />
+            SPACEBAR or Click to jump
+        </div>
+        
+        <div class="screen" id="startScreen">
+            <div class="emoji">🦙</div>
+            <h1>Leap Llama</h1>
+            <p>Jump from hay bale to hay bale using the spinning arrow! Time your clicks perfectly to land on each hay bale.</p>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        
+        <div class="screen hidden" id="gameOverScreen">
+            <h2>Game Over!</h2>
+            <p id="finalScore">Final Score: 0</p>
+            <p>The llama missed the hay bale!</p>
+            <button class="restart-button" onclick="restartGame()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = 'start'; // 'start', 'aiming', 'jumping', 'gameOver'
+        let score = 0;
+        let showInstructions = true;
+        let level = 1;
+        
+        // Canvas setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrame;
+        
+        // Game objects
+        const llama = {
+            x: 100,
+            y: 300,
+            width: 80,
+            height: 64,
+            targetX: 0,
+            targetY: 0,
+            jumpProgress: 0,
+            isJumping: false,
+            currentHayBale: 0
+        };
+        
+        const gameData = {
+            hayBales: [],
+            particles: [],
+            arrow: {
+                angle: 0,
+                spinning: true,
+                spinSpeed: 0.08
+            },
+            nextHayBaleId: 0,
+            level: 1
+        };
+        
+        // Initialize canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        // Event listeners
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('keydown', handleKeyDown);
+        canvas.addEventListener('click', handleClick);
+        
+        function handleKeyDown(event) {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                handleAction();
+            }
+        }
+        
+        function handleClick() {
+            handleAction();
+        }
+        
+        function handleAction() {
+            if (gameState === 'aiming') {
+                gameData.arrow.spinning = false;
+                jump();
+            }
+        }
+        
+        function jump() {
+            gameState = 'jumping';
+            llama.isJumping = true;
+            llama.jumpProgress = 0;
+            
+            const jumpDistance = 150 + Math.random() * 50;
+            llama.targetX = llama.x + Math.cos(gameData.arrow.angle) * jumpDistance;
+            llama.targetY = llama.y + Math.sin(gameData.arrow.angle) * jumpDistance;
+            
+            // Add jump particles
+            for (let i = 0; i < 8; i++) {
+                gameData.particles.push({
+                    x: llama.x + llama.width / 2,
+                    y: llama.y + llama.height,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: Math.random() * -4 - 2,
+                    life: 1,
+                    color: '#8B4513',
+                    size: Math.random() * 3 + 1
+                });
+            }
+        }
+        
+        function startGame() {
+            gameState = 'aiming';
+            score = 0;
+            level = 1;
+            resetGame();
+            document.getElementById('startScreen').classList.add('hidden');
+            updateUI();
+        }
+        
+        function restartGame() {
+            gameState = 'aiming';
+            score = 0;
+            level = 1;
+            resetGame();
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            updateUI();
+        }
+        
+        function resetGame() {
+            llama.x = 100;
+            llama.y = 350;
+            llama.currentHayBale = 0;
+            llama.isJumping = false;
+            llama.jumpProgress = 0;
+            
+            gameData.hayBales = [];
+            gameData.particles = [];
+            gameData.nextHayBaleId = 0;
+            gameData.level = level;
+            gameData.arrow.angle = 0;
+            gameData.arrow.spinning = true;
+            
+            generateLevel();
+            showInstructions = true;
+            setTimeout(() => showInstructions = false, 5000);
+        }
+        
+        function generateLevel() {
+            // Create starting hay bale
+            gameData.hayBales.push({
+                id: gameData.nextHayBaleId++,
+                x: 50,
+                y: 370,
+                width: 100,
+                height: 60,
+                visited: true
+            });
+            
+            const patterns = [
+                [
+                    { x: 250, y: 320 },
+                    { x: 450, y: 280 },
+                    { x: 650, y: 340 },
+                    { x: 850, y: 300 },
+                    { x: 1050, y: 260 }
+                ],
+                [
+                    { x: 280, y: 380 },
+                    { x: 480, y: 250 },
+                    { x: 680, y: 380 },
+                    { x: 880, y: 220 },
+                    { x: 1080, y: 360 }
+                ],
+                [
+                    { x: 300, y: 350 },
+                    { x: 500, y: 280 },
+                    { x: 700, y: 250 },
+                    { x: 900, y: 280 },
+                    { x: 1100, y: 350 }
+                ]
+            ];
+            
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            
+            pattern.forEach(pos => {
+                gameData.hayBales.push({
+                    id: gameData.nextHayBaleId++,
+                    x: pos.x,
+                    y: pos.y,
+                    width: 80 + Math.random() * 30,
+                    height: 50 + Math.random() * 20,
+                    visited: false
+                });
+            });
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = `Score: ${score}`;
+            document.getElementById('level').textContent = `Level: ${level}`;
+            document.getElementById('instructions').classList.toggle('hidden', !showInstructions || gameState !== 'aiming');
+        }
+        
+        function gameLoop() {
+            // Update arrow spinning
+            if (gameData.arrow.spinning && gameState === 'aiming') {
+                gameData.arrow.angle += gameData.arrow.spinSpeed;
+            }
+            
+            // Update llama jumping
+            if (llama.isJumping && gameState === 'jumping') {
+                llama.jumpProgress += 0.035;
+                
+                if (llama.jumpProgress >= 1) {
+                    llama.jumpProgress = 1;
+                    llama.isJumping = false;
+                    
+                    let landedOnHayBale = false;
+                    let landedHayBale = null;
+                    
+                    gameData.hayBales.forEach((hayBale, index) => {
+                        if (index === 0) return;
+                        
+                        const distance = Math.sqrt(
+                            Math.pow(llama.x + llama.width/2 - (hayBale.x + hayBale.width/2), 2) +
+                            Math.pow(llama.y + llama.height - hayBale.y, 2)
+                        );
+                        
+                        if (distance < 50 && !hayBale.visited) {
+                            landedOnHayBale = true;
+                            landedHayBale = hayBale;
+                            hayBale.visited = true;
+                            llama.currentHayBale = index;
+                            llama.x = hayBale.x + hayBale.width/2 - llama.width/2;
+                            llama.y = hayBale.y - llama.height;
+                        }
+                    });
+                    
+                    if (landedOnHayBale && landedHayBale) {
+                        score += 100;
+                        gameState = 'aiming';
+                        gameData.arrow.spinning = true;
+                        
+                        // Add success particles
+                        for (let i = 0; i < 15; i++) {
+                            gameData.particles.push({
+                                x: landedHayBale.x + landedHayBale.width/2,
+                                y: landedHayBale.y,
+                                vx: (Math.random() - 0.5) * 8,
+                                vy: Math.random() * -6 - 2,
+                                life: 1,
+                                color: '#FFD700',
+                                size: Math.random() * 4 + 2
+                            });
+                        }
+                        
+                        // Check if all hay bales visited
+                        const allVisited = gameData.hayBales.every((bale, index) => index === 0 || bale.visited);
+                        if (allVisited) {
+                            level++;
+                            setTimeout(() => {
+                                generateLevel();
+                            }, 1000);
+                        }
+                        
+                        updateUI();
+                    } else {
+                        gameState = 'gameOver';
+                        document.getElementById('finalScore').textContent = `Final Score: ${score}`;
+                        document.getElementById('gameOverScreen').classList.remove('hidden');
+                    }
+                } else {
+                    const startX = gameData.hayBales[llama.currentHayBale]?.x + gameData.hayBales[llama.currentHayBale]?.width/2 - llama.width/2 || llama.x;
+                    const startY = gameData.hayBales[llama.currentHayBale]?.y - llama.height || llama.y;
+                    
+                    const t = llama.jumpProgress;
+                    const jumpHeight = 120;
+                    
+                    llama.x = startX + (llama.targetX - startX) * t;
+                    llama.y = startY + (llama.targetY - startY) * t - jumpHeight * 4 * t * (1 - t);
+                }
+            }
+            
+            // Update particles
+            gameData.particles = gameData.particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vy += 0.2;
+                particle.life -= 0.02;
+                particle.size *= 0.98;
+                return particle.life > 0 && particle.y < canvas.height;
+            });
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background
+            drawBackground();
+            
+            // Draw hay bales
+            gameData.hayBales.forEach(hayBale => drawHayBale(hayBale));
+            
+            // Draw particles
+            gameData.particles.forEach(particle => drawParticle(particle));
+            
+            // Draw llama
+            drawPixelLlama();
+            
+            // Draw spinning arrow when aiming
+            if (gameState === 'aiming') {
+                drawSpinningArrow();
+            }
+            
+            animationFrame = requestAnimationFrame(gameLoop);
+        }
+        
+        function drawBackground() {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(0.6, '#98FB98');
+            gradient.addColorStop(1, '#228B22');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Simple ground
+            ctx.fillStyle = '#8FBC8F';
+            ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
+            
+            // Ground texture
+            ctx.fillStyle = '#9ACD32';
+            for (let x = 0; x < canvas.width; x += 20) {
+                for (let y = canvas.height - 80; y < canvas.height; y += 20) {
+                    if ((x + y) % 40 === 0) {
+                        ctx.fillRect(x, y, 8, 8);
+                    }
+                }
+            }
+        }
+        
+        function drawHayBale(hayBale) {
+            // Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(hayBale.x + 5, hayBale.y + hayBale.height, hayBale.width, 8);
+            
+            // Main hay bale body
+            ctx.fillStyle = hayBale.visited ? '#DAA520' : '#B8860B';
+            ctx.fillRect(hayBale.x, hayBale.y, hayBale.width, hayBale.height);
+            
+            // Hay texture
+            ctx.strokeStyle = '#8B7355';
+            ctx.lineWidth = 2;
+            
+            // Horizontal lines
+            for (let i = 8; i < hayBale.height; i += 12) {
+                ctx.beginPath();
+                ctx.moveTo(hayBale.x, hayBale.y + i);
+                ctx.lineTo(hayBale.x + hayBale.width, hayBale.y + i);
+                ctx.stroke();
+            }
+            
+            // Vertical lines
+            for (let i = 15; i < hayBale.width; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(hayBale.x + i, hayBale.y);
+                ctx.lineTo(hayBale.x + i, hayBale.y + hayBale.height);
+                ctx.stroke();
+            }
+            
+            // Highlight unvisited hay bales
+            if (!hayBale.visited && hayBale.id !== 0) {
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(hayBale.x - 2, hayBale.y - 2, hayBale.width + 4, hayBale.height + 4);
+            }
+        }
+        
+        function drawPixelLlama() {
+            const pixelSize = 4;
+            const startX = llama.x;
+            const startY = llama.y;
+            
+            const llamaPixels = [
+                // Main body (cream/white color like in reference)
+                [2,10, '#F5E6D3'], [3,10, '#F5E6D3'], [4,10, '#F5E6D3'], [5,10, '#F5E6D3'], [6,10, '#F5E6D3'], [7,10, '#F5E6D3'], [8,10, '#F5E6D3'], [9,10, '#F5E6D3'], [10,10, '#F5E6D3'],
+                [1,11, '#F5E6D3'], [2,11, '#F5E6D3'], [3,11, '#F5E6D3'], [4,11, '#F5E6D3'], [5,11, '#F5E6D3'], [6,11, '#F5E6D3'], [7,11, '#F5E6D3'], [8,11, '#F5E6D3'], [9,11, '#F5E6D3'], [10,11, '#F5E6D3'], [11,11, '#F5E6D3'],
+                [1,12, '#F5E6D3'], [2,12, '#F5E6D3'], [3,12, '#F5E6D3'], [4,12, '#F5E6D3'], [5,12, '#F5E6D3'], [6,12, '#F5E6D3'], [7,12, '#F5E6D3'], [8,12, '#F5E6D3'], [9,12, '#F5E6D3'], [10,12, '#F5E6D3'], [11,12, '#F5E6D3'],
+                [2,13, '#F5E6D3'], [3,13, '#F5E6D3'], [4,13, '#F5E6D3'], [5,13, '#F5E6D3'], [6,13, '#F5E6D3'], [7,13, '#F5E6D3'], [8,13, '#F5E6D3'], [9,13, '#F5E6D3'], [10,13, '#F5E6D3'],
+                
+                // Body shading (darker spots)
+                [2,10, '#E6D2B3'], [8,10, '#E6D2B3'], [1,11, '#E6D2B3'], [10,11, '#E6D2B3'], [2,12, '#E6D2B3'], [9,12, '#E6D2B3'],
+                
+                // Long neck (characteristic llama feature)
+                [7,7, '#F5E6D3'], [8,7, '#F5E6D3'], [9,7, '#F5E6D3'],
+                [7,8, '#F5E6D3'], [8,8, '#F5E6D3'], [9,8, '#F5E6D3'],
+                [7,9, '#F5E6D3'], [8,9, '#F5E6D3'], [9,9, '#F5E6D3'],
+                
+                // Head (slightly pinkish like in reference)
+                [6,3, '#F5DEB3'], [7,3, '#F5DEB3'], [8,3, '#F5DEB3'], [9,3, '#F5DEB3'], [10,3, '#F5DEB3'], [11,3, '#F5DEB3'], [12,3, '#F5DEB3'],
+                [5,4, '#F5DEB3'], [6,4, '#F5DEB3'], [7,4, '#F5DEB3'], [8,4, '#F5DEB3'], [9,4, '#F5DEB3'], [10,4, '#F5DEB3'], [11,4, '#F5DEB3'], [12,4, '#F5DEB3'], [13,4, '#F5DEB3'],
+                [5,5, '#F5DEB3'], [6,5, '#F5DEB3'], [7,5, '#F5DEB3'], [8,5, '#F5DEB3'], [9,5, '#F5DEB3'], [10,5, '#F5DEB3'], [11,5, '#F5DEB3'], [12,5, '#F5DEB3'], [13,5, '#F5DEB3'],
+                [6,6, '#F5DEB3'], [7,6, '#F5DEB3'], [8,6, '#F5DEB3'], [9,6, '#F5DEB3'], [10,6, '#F5DEB3'], [11,6, '#F5DEB3'], [12,6, '#F5DEB3'],
+                
+                // Characteristic llama ears (pointed and fluffy)
+                [5,2, '#D2B48C'], [6,2, '#D2B48C'], [11,2, '#D2B48C'], [12,2, '#D2B48C'],
+                [5,3, '#D2B48C'], [12,3, '#D2B48C'],
+                
+                // Eyes (dark and distinctive)
+                [7,4, '#000'], [8,4, '#000'], [10,4, '#000'], [11,4, '#000'],
+                
+                // Eye highlights (make them look more alive)
+                [7,4, '#FFF'], [10,4, '#FFF'],
+                
+                // Nose/mouth area
+                [8,5, '#FFB6C1'], [9,5, '#FFB6C1'],
+                [8,6, '#000'], [9,6, '#000'],
+                
+                // Characteristic llama "smile"
+                [7,6, '#000'], [10,6, '#000'],
+                
+                // Legs (sturdy llama legs)
+                [2,14, '#D2B48C'], [3,14, '#D2B48C'], [5,14, '#D2B48C'], [6,14, '#D2B48C'], [7,14, '#D2B48C'], [8,14, '#D2B48C'], [10,14, '#D2B48C'], [11,14, '#D2B48C'],
+                [2,15, '#D2B48C'], [3,15, '#D2B48C'], [5,15, '#D2B48C'], [6,15, '#D2B48C'], [7,15, '#D2B48C'], [8,15, '#D2B48C'], [10,15, '#D2B48C'], [11,15, '#D2B48C'],
+                
+                // Hooves
+                [2,15, '#8B4513'], [3,15, '#8B4513'], [5,15, '#8B4513'], [6,15, '#8B4513'], [7,15, '#8B4513'], [8,15, '#8B4513'], [10,15, '#8B4513'], [11,15, '#8B4513'],
+                
+                // Tail (small fluffy tail)
+                [0,11, '#F5E6D3'], [0,12, '#F5E6D3'],
+                
+                // Some wool texture on body
+                [3,11, '#FFFAF0'], [5,11, '#FFFAF0'], [7,11, '#FFFAF0'], [9,11, '#FFFAF0'],
+                [4,12, '#FFFAF0'], [6,12, '#FFFAF0'], [8,12, '#FFFAF0'],
+            ];
+            
+            // Draw shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(startX, startY + llama.height, llama.width, 6);
+            
+            // Draw llama pixels
+            llamaPixels.forEach(([x, y, color]) => {
+                ctx.fillStyle = color;
+                ctx.fillRect(startX + x * pixelSize, startY + y * pixelSize, pixelSize, pixelSize);
+            });
+        }
+        
+        function drawSpinningArrow() {
+            const centerX = llama.x + llama.width / 2;
+            const centerY = llama.y + llama.height / 2;
+            const circleRadius = 60;
+            const arrowLength = 50;
+            
+            // Draw circle around llama
+            ctx.strokeStyle = 'rgba(255, 68, 68, 0.6)';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, circleRadius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Calculate arrow position on circle
+            const arrowX = centerX + Math.cos(gameData.arrow.angle) * circleRadius;
+            const arrowY = centerY + Math.sin(gameData.arrow.angle) * circleRadius;
+            
+            ctx.save();
+            ctx.translate(arrowX, arrowY);
+            ctx.rotate(gameData.arrow.angle);
+            
+            // Arrow shaft
+            ctx.strokeStyle = '#FF4444';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(arrowLength, 0);
+            ctx.stroke();
+            
+            // Arrow head
+            ctx.fillStyle = '#FF4444';
+            ctx.beginPath();
+            ctx.moveTo(arrowLength, 0);
+            ctx.lineTo(arrowLength - 12, -6);
+            ctx.lineTo(arrowLength - 12, 6);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Arrow base circle
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(0, 0, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#FF4444';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
+        function drawParticle(particle) {
+            ctx.save();
+            ctx.globalAlpha = particle.life;
+            ctx.fillStyle = particle.color;
+            ctx.fillRect(particle.x - particle.size/2, particle.y - particle.size/2, particle.size, particle.size);
+            ctx.restore();
+        }
+        
+        // Initialize game
+        resizeCanvas();
+        gameLoop();
+    </script>
+</body>
+</html>
