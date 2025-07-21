@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie & TV Show Recommendations for My Friend</title>
+    <meta name="description" content="Personalized movie and TV show recommendations based on your friend's favorite films and series">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, #e50914, #f40612);
+            padding: 40px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #e50914;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: #e50914;
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .movie-card {
+            background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #e50914, #f40612);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.2);
+        }
+
+        .movie-card:hover::before {
+            opacity: 1;
+        }
+
+        .movie-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .movie-year {
+            color: #e50914;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .movie-category {
+            background: rgba(229, 9, 20, 0.2);
+            color: #ff6b6b;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .star {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .rating-value {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .recommendations-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 40px;
+            border: 1px solid #333;
+        }
+
+        .recommendation-card {
+            background: linear-gradient(145deg, #333333, #2a2a2a);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e50914;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.15);
+        }
+
+        .rec-reason {
+            background: rgba(229, 9, 20, 0.1);
+            color: #ff8a8a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 10px;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #e50914, #f40612);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+        }
+
+        .nav-button.secondary {
+            background: linear-gradient(45deg, #333, #444);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-button.secondary:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .center-text {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎬 Movie & TV Recommendations</h1>
+            <p>Personalized suggestions based on your friend's amazing taste!</p>
+        </header>
+
+        <!-- Friend's Favorite Movies -->
+        <section class="section">
+            <h2 class="section-title">Your Friend's Favorite Movies</h2>
+            <div class="movies-grid" id="movies-grid">
+                <!-- Movies will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Friend's Favorite Shows -->
+        <section class="section">
+            <h2 class="section-title">Your Friend's Favorite TV Shows</h2>
+            <div class="movies-grid" id="shows-grid">
+                <!-- Shows will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Recommendations -->
+        <section class="recommendations-section">
+            <h2 class="section-title">🎯 Recommendations For You</h2>
+            <div id="recommendations-grid">
+                <!-- Recommendations will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <a href="tales.html" class="nav-button secondary">
+                ← Back: To Be Read List
+            </a>
+            <div class="center-text">
+                <p>Made with ❤️ and good taste</p>
+            </div>
+            <a href="watchlog.html" class="nav-button">
+                Next: Recipes →
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // Friend's favorite movies data
+        const favoriteMovies = [
+            { title: "The Intern", year: 2015, category: "comedy", rating: 7.1 },
+            { title: "The Sound of Music", year: 1965, category: "drama", rating: 8.1 },
+            { title: "Harry Potter", year: 2001, category: "fantasy", rating: 8.2 },
+            { title: "Forest Gump", year: 1994, category: "drama", rating: 8.8 },
+            { title: "The Pursuit of Happiness", year: 2006, category: "drama", rating: 8.0 },
+            { title: "How to Lose a Guy in 10 Days", year: 2003, category: "comedy", rating: 6.4 },
+            { title: "Big", year: 1988, category: "comedy", rating: 7.3 },
+            { title: "The Invisible Man", year: 2020, category: "action", rating: 7.1 },
+            { title: "She's the Man", year: 2006, category: "comedy", rating: 6.3 },
+            { title: "Hitch", year: 2005, category: "comedy", rating: 6.6 },
+            { title: "Men in Black", year: 1997, category: "action", rating: 7.3 },
+            { title: "Rush Hour", year: 1998, category: "action", rating: 7.0 },
+            { title: "Kung Fu Hustle", year: 2004, category: "action", rating: 7.8 },
+            { title: "Crouching Tiger, Hidden Dragon", year: 2000, category: "action", rating: 7.9 },
+            { title: "Along with the Gods", year: 2017, category: "fantasy", rating: 7.3 },
+            { title: "Real Steel", year: 2011, category: "action", rating: 7.0 },
+            { title: "I, Robot", year: 2004, category: "action", rating: 7.1 },
+            { title: "The Terminator", year: 1984, category: "action", rating: 8.1 },
+            { title: "Maze Runner", year: 2014, category: "action", rating: 6.8 },
+            { title: "Guardians of the Galaxy", year: 2014, category: "action", rating: 8.0 },
+            { title: "Planet of the Apes", year: 2011, category: "action", rating: 7.6 },
+            { title: "Doctor Strange", year: 2016, category: "action", rating: 7.5 },
+            { title: "Train to Busan", year: 2016, category: "thriller", rating: 7.6 },
+            { title: "Midnight Runners", year: 2017, category: "action", rating: 7.3 },
+            { title: "Shang Chi and the Legend of the Ten Rings", year: 2021, category: "action", rating: 7.4 },
+            { title: "The Wolverine", year: 2013, category: "action", rating: 6.7 },
+            { title: "Spider-Man: Into the Spider-Verse", year: 2018, category: "animation", rating: 8.4 },
+            { title: "Spider-Man: Across the Spider-Verse", year: 2023, category: "animation", rating: 8.7 },
+            { title: "Fantastic 4", year: 2005, category: "action", rating: 5.7 },
+            { title: "Pirates of the Caribbean", year: 2003, category: "adventure", rating: 8.1 },
+            { title: "The Darkest Minds", year: 2018, category: "action", rating: 5.7 },
+            { title: "The Truman Show", year: 1998, category: "drama", rating: 8.2 },
+            { title: "The Wizard of Oz", year: 1939, category: "fantasy", rating: 8.1 },
+            { title: "Inception", year: 2010, category: "action", rating: 8.8 },
+            { title: "In Time", year: 2011, category: "action", rating: 6.7 },
+            { title: "Us", year: 2019, category: "thriller", rating: 6.8 },
+            { title: "The Martian", year: 2015, category: "drama", rating: 8.0 },
+            { title: "Passengers", year: 2016, category: "drama", rating: 7.0 },
+            { title: "The Hunger Games", year: 2012, category: "action", rating: 7.2 },
+            { title: "Arrival", year: 2016, category: "drama", rating: 7.9 },
+            { title: "Overboard", year: 2018, category: "comedy", rating: 6.0 },
+            { title: "The Proposal", year: 2009, category: "comedy", rating: 6.7 },
+            { title: "Jumanji", year: 2017, category: "adventure", rating: 6.9 },
+            { title: "Cast Away", year: 2000, category: "drama", rating: 7.8 },
+            { title: "The Devil Wears Prada", year: 2006, category: "comedy", rating: 6.9 },
+            { title: "Freedom Writers", year: 2007, category: "drama", rating: 7.6 },
+            { title: "Bedtime Stories", year: 2008, category: "comedy", rating: 6.0 },
+            { title: "The Emperor's New Groove", year: 2000, category: "animation", rating: 7.4 },
+            { title: "Ponyo", year: 2008, category: "animation", rating: 7.7 },
+            { title: "My Octopus Teacher", year: 2020, category: "documentary", rating: 8.1 }
+        ];
+
+        // Friend's favorite shows data
+        const favoriteShows = [
+            { title: "Alice in Borderland", year: 2020, category: "thriller", rating: 7.8 },
+            { title: "Squid Game", year: 2021, category: "thriller", rating: 8.0 },
+            { title: "Strong Woman Do Bong Soon", year: 2017, category: "comedy", rating: 8.2 },
+            { title: "Naked and Afraid", year: 2013, category: "reality", rating: 6.9 },
+            { title: "Modern Family", year: 2009, category: "comedy", rating: 8.5 },
+            { title: "I Can See Your Voice", year: 2020, category: "variety", rating: 7.2 },
+            { title: "Young Sheldon", year: 2017, category: "comedy", rating: 7.7 },
+            { title: "One Day At A Time", year: 1975, category: "comedy", rating: 8.2 },
+            { title: "Avatar: The Last Airbender", year: 2005, category: "animation", rating: 9.3 }
+        ];
+
+        // Recommendations based on friend's taste
+        const recommendations = [
+            { title: "Brooklyn Nine-Nine", reason: "If you loved Modern Family's humor", category: "comedy", rating: 8.4 },
+            { title: "The Good Place", reason: "For fans of clever comedy with heart", category: "comedy", rating: 8.2 },
+            { title: "Interstellar", reason: "If you enjoyed Inception's complexity", category: "sci-fi", rating: 8.6 },
+            { title: "Parasite", reason: "Perfect for Train to Busan fans", category: "thriller", rating: 8.5 },
+            { title: "Your Name", reason: "Beautiful animation like Studio Ghibli", category: "animation", rating: 8.2 },
+            { title: "The Social Network", reason: "Similar themes to The Intern", category: "drama", rating: 7.7 },
+            { title: "Crazy Rich Asians", reason: "Romantic comedy with great chemistry", category: "comedy", rating: 6.9 },
+            { title: "Kingdom (Netflix)", reason: "Korean thriller like Alice in Borderland", category: "thriller", rating: 8.3 },
+            { title: "Blade Runner 2049", reason: "Sci-fi action like The Martian", category: "sci-fi", rating: 8.0 },
+            { title: "Everything Everywhere All at Once", reason: "Mind-bending like Inception", category: "sci-fi", rating: 7.8 },
+            { title: "Encanto", reason: "Family-friendly animation", category: "animation", rating: 7.3 },
+            { title: "Ted Lasso", reason: "Feel-good comedy series", category: "comedy", rating: 8.7 },
+            { title: "Stranger Things", reason: "Adventure with great characters", category: "thriller", rating: 8.7 },
+            { title: "The Mandalorian", reason: "Epic space adventure", category: "sci-fi", rating: 8.5 },
+            { title: "Spirited Away", reason: "Magical like Studio Ghibli films", category: "animation", rating: 9.2 }
+        ];
+
+        // Function to create movie card HTML
+        function createMovieCard(movie) {
+            return `
+                <div class="movie-card">
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-year">${movie.year}</div>
+                    <div class="movie-category">${movie.category}</div>
+                    <div class="rating">
+                        <span class="star">★</span>
+                        <span class="rating-value">${movie.rating}/10</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to create recommendation card HTML
+        function createRecommendationCard(rec) {
+            return `
+                <div class="recommendation-card">
+                    <div class="movie-title">${rec.title}</div>
+                    <div class="movie-category">${rec.category}</div>
+                    <div class="rating">
+                        <span class="star">★</span>
+                        <span class="rating-value">${rec.rating}/10</span>
+                    </div>
+                    <div class="rec-reason">${rec.reason}</div>
+                </div>
+            `;
+        }
+
+        // Populate the grids
+        function populateContent() {
+            const moviesGrid = document.getElementById('movies-grid');
+            const showsGrid = document.getElementById('shows-grid');
+            const recommendationsGrid = document.getElementById('recommendations-grid');
+
+            // Populate movies
+            moviesGrid.innerHTML = favoriteMovies.map(createMovieCard).join('');
+
+            // Populate shows
+            showsGrid.innerHTML = favoriteShows.map(createMovieCard).join('');
+
+            // Populate recommendations
+            recommendationsGrid.innerHTML = recommendations.map(createRecommendationCard).join('');
+        }
+
+        // Initialize content when page loads
+        document.addEventListener('DOMContentLoaded', populateContent);
+    </script>
+</body>
+</html>
