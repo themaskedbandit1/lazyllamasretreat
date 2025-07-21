@@ -109,6 +109,9 @@
         font-size: 1.5rem;
         font-weight: bold;
         cursor: pointer;
+        color: var(--primary);
+        text-decoration: none;
+        transition: color 0.3s ease;
       }
 
       .nav-links {
@@ -348,137 +351,6 @@
         transition: background-color 0.3s ease;
       }
 
-      /* Food tabs styles */
-      .tabs {
-        margin-bottom: 2rem;
-      }
-
-      .tab-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        border-bottom: 1px solid var(--accent);
-        margin-bottom: 1.5rem;
-      }
-
-      .tab {
-        padding: 0.5rem 1rem;
-        font-weight: 500;
-        color: var(--text);
-        opacity: 0.7;
-        cursor: pointer;
-        border-bottom: 2px solid transparent;
-        transition:
-          color 0.3s ease,
-          border-color 0.3s ease,
-          opacity 0.3s ease;
-      }
-
-      .tab.active {
-        color: var(--primary);
-        border-bottom-color: var(--primary);
-        opacity: 1;
-      }
-
-      .tab-content {
-        display: none;
-      }
-
-      .tab-content.active {
-        display: block;
-      }
-
-      .food-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.5rem;
-      }
-
-      .food-item:before {
-        content: "•";
-        color: var(--secondary);
-        margin-right: 0.5rem;
-      }
-
-      .recipe {
-        background-color: var(--prompt-bg);
-        border-radius: 0.5rem;
-        padding: 1.25rem;
-        margin-top: 1.5rem;
-        transition: background-color 0.3s ease;
-      }
-
-      .recipe h4 {
-        font-size: 1.25rem;
-        margin-bottom: 0.75rem;
-      }
-
-      .recipe-meta {
-        font-size: 0.875rem;
-        color: var(--text);
-        opacity: 0.8;
-        margin-bottom: 1rem;
-      }
-
-      .recipe-section {
-        margin-bottom: 1rem;
-      }
-
-      .recipe-section h5 {
-        font-weight: 500;
-        color: var(--text);
-        margin-bottom: 0.5rem;
-      }
-
-      .recipe-section ul,
-      .recipe-section ol {
-        margin-left: 1.25rem;
-        color: var(--text);
-        opacity: 0.8;
-      }
-
-      .recipe-notes {
-        font-style: italic;
-        font-size: 0.875rem;
-        color: var(--text);
-        opacity: 0.8;
-        margin-top: 0.75rem;
-      }
-
-      /* Affirmation styles */
-      .au-accordion {
-        margin-top: 2rem;
-      }
-
-      .au-item {
-        background-color: var(--prompt-bg);
-        border-radius: 0.5rem;
-        overflow: hidden;
-        margin-bottom: 1rem;
-        transition: background-color 0.3s ease;
-      }
-
-      .au-trigger {
-        padding: 1rem;
-        font-weight: 500;
-        color: var(--primary);
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .au-content {
-        padding: 0 1rem 1rem;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-
-      .au-content.open {
-        max-height: 2000px;
-      }
-
       /* Media grid */
       .media-grid {
         display: grid;
@@ -503,94 +375,27 @@
         box-shadow: 0 10px 15px var(--shadow);
       }
 
-      .video-link-container {
-        margin-top: 1.5rem;
-        text-align: center;
-      }
-      .video-link {
-        display: inline-block;
-        text-decoration: none;
-        color: var(--primary);
-        transition: transform 0.3s ease;
-      }
-      .video-link:hover {
-        transform: scale(1.05);
-      }
-      .video-thumbnail {
-        background-color: var(--prompt-bg);
-        border-radius: 0.75rem;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        box-shadow: 0 4px 10px var(--shadow);
-      }
-      .video-thumbnail i {
-        font-size: 3rem;
-        color: var(--primary);
-      }
-      .video-thumbnail span {
-        font-weight: 500;
-      }
-
       .media-card h4 {
-        font-size: 1.25rem;
-        margin-bottom: 0.75rem;
-        color: var(--primary);
-      }
-
-      .media-list {
-        max-height: 300px;
-        overflow-y: auto;
-        padding-right: 0.5rem;
-      }
-
-      .media-list::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      .media-list::-webkit-scrollbar-track {
-        background: var(--background);
-        border-radius: 10px;
-      }
-
-      .media-list::-webkit-scrollbar-thumb {
-        background: var(--primary);
-        border-radius: 10px;
-      }
-
-      .media-item {
         margin-bottom: 0.5rem;
-        display: flex;
-        align-items: flex-start;
       }
 
-      .media-item:before {
-        content: "•";
-        color: var(--secondary);
-        margin-right: 0.5rem;
-        flex-shrink: 0;
+      .media-card p {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
       }
 
-      .media-year {
-        font-size: 0.8rem;
-        opacity: 0.7;
-        margin-left: 0.25rem;
-      }
-
-      /* Resources section */
+      /* Resources grid */
       .resources-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
       }
 
       .resource-card {
         background-color: var(--card-bg);
         border-radius: 0.75rem;
         box-shadow: 0 4px 6px var(--shadow);
-        padding: 1.25rem;
+        padding: 1.5rem;
         border: 1px solid var(--accent);
         transition:
           transform 0.3s ease,
@@ -604,138 +409,31 @@
       }
 
       .resource-card h4 {
-        font-size: 1.25rem;
         margin-bottom: 0.75rem;
-        color: var(--primary);
       }
 
-      .resource-card {
+      .resource-card p {
         margin-bottom: 1rem;
-        overflow: hidden;
       }
+
       .resource-link {
-        display: inline-block;
-        color: var(--primary);
+        display: inline-flex;
+        align-items: center;
+        background-color: var(--primary);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
         text-decoration: none;
         font-weight: 500;
-        margin-top: 0.5rem;
-        transition: color 0.3s ease;
+        transition: background-color 0.3s ease;
       }
 
       .resource-link:hover {
-        color: var(--secondary);
-        text-decoration: underline;
+        background-color: var(--secondary);
       }
 
       .resource-link i {
-        margin-left: 0.25rem;
-      }
-
-      /* Video container */
-      .video-container {
-        position: relative;
-        padding-bottom: 56.25%;
-        height: 0;
-        overflow: hidden;
-        border-radius: 0.75rem;
-        margin-top: 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 4px 10px var(--shadow);
-        clear: both;
-      }
-
-      .video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: none;
-      }
-
-      /* Coloring pages */
-      .coloring-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        margin-top: 2rem;
-        clear: both;
-      }
-
-      .coloring-item {
-        background-color: var(--card-bg);
-        border-radius: 0.75rem;
-        overflow: hidden;
-        box-shadow: 0 4px 6px var(--shadow);
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease;
-      }
-
-      .coloring-item:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px var(--shadow);
-      }
-
-      .coloring-image {
-        width: 100%;
-        height: auto;
-        display: block;
-        background-color: white;
-      }
-
-      .coloring-caption {
-        padding: 1rem;
-        text-align: center;
-        font-size: 0.9rem;
-        color: var(--text);
-      }
-
-      .download-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--primary);
-        color: white;
-        padding: 0.35rem 0.75rem;
-        border-radius: 0.5rem;
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-        text-decoration: none;
-        transition:
-          background-color 0.3s ease,
-          transform 0.3s ease;
-      }
-
-      .download-btn:hover {
-        background-color: var(--secondary);
-        transform: translateY(-2px);
-      }
-
-      .download-btn i {
-        margin-right: 0.35rem;
-      }
-
-      /* Button styles */
-      .btn {
-        display: inline-block;
-        background-color: var(--primary);
-        color: white;
-        padding: 0.5rem 1.25rem;
-        border-radius: 0.5rem;
-        font-weight: 500;
-        text-decoration: none;
-        transition:
-          background-color 0.3s ease,
-          transform 0.3s ease;
-        border: none;
-        cursor: pointer;
-        margin-top: 1rem;
-      }
-
-      .btn:hover {
-        background-color: var(--secondary);
-        transform: translateY(-2px);
+        margin-left: 0.5rem;
       }
 
       /* Footer styles */
@@ -775,61 +473,6 @@
         margin-bottom: 0.25rem;
       }
 
-      /* Grid styles */
-      .grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      /* Media queries */
-      @media (min-width: 768px) {
-        .nav-links {
-          display: flex;
-        }
-
-        .menu-button {
-          display: none;
-        }
-
-        .grid,
-        .media-grid,
-        .resources-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .footer-content {
-          flex-direction: row;
-        }
-
-        .footer-logo {
-          margin-bottom: 0;
-        }
-
-        .footer-text {
-          text-align: right;
-        }
-
-        .coloring-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-
-      @media (min-width: 1024px) {
-        .grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
-
-        .media-grid,
-        .resources-grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
-
-        .coloring-grid {
-          grid-template-columns: repeat(4, 1fr);
-        }
-      }
-
       /* Utility classes */
       .chevron-icon {
         transition: transform 0.3s ease;
@@ -865,9 +508,44 @@
           transform: translateY(0);
         }
       }
+
+      /* Media queries */
+      @media (min-width: 768px) {
+        .nav-links {
+          display: flex;
+        }
+
+        .menu-button {
+          display: none;
+        }
+
+        .media-grid,
+        .resources-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .footer-content {
+          flex-direction: row;
+        }
+
+        .footer-logo {
+          margin-bottom: 0;
+        }
+
+        .footer-text {
+          text-align: right;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .media-grid,
+        .resources-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
     </style>
   </head>
-    <body>
+  <body>
     <header id="header">
       <div class="container">
         <nav>
@@ -956,19 +634,9 @@
       <section id="media">
         <h2>Comfort Media</h2>
         <p>
-          Content creators you might enjoy.
+          Content you might enjoy.
         </p>
         <div class="media-grid" id="media-grid"></div>
-
-        <!-- TikTok video link -->
-        <div class="video-link-container">
-          <a href="/mellington-care-den/images/blessedtiktok.mp4" target="_blank" class="video-link">
-            <div class="video-thumbnail">
-              <i class="fas fa-video"></i>
-              <span>Blessed TikTok</span>
-            </div>
-          </a>
-        </div>
       </section>
 
       <section id="resources">
@@ -1000,7 +668,10 @@
               to take breaks.
             </p>
           </div>
-          
+        </div>
+      </section>
+    </main>
+    
     <footer>
       <div class="container">
         <div class="footer-content">
@@ -1015,8 +686,8 @@
         </div>
       </div>
     </footer>
-        <script>
 
+    <script>
       const journalPrompts = [
         {
           title: "Acknowledging Your Shadow Self",
@@ -1053,443 +724,264 @@
       const mediaLists = {
         movies: [
           { title: "The Intern", year: "2015" },
-          { title: "The Sound of Music", year: "1965" },
+          { title: "She's the man", year: "2006" },
           { title: "Harry Potter", year: "2001-2011" },
           { title: "Forest Gump", year: "1994" },
-          { title: "The Pursuit of Happiness", year: "2006" },
-          { title: "How to Lose a Guy in 10 Days", year: "2003" },
-          { title: "Big", year: "1988" },
-          { title: "The Invisible Man", year: "2020" },
-          { title: "She's the Man", year: "2006" },
-          { title: "Hitch", year: "2005" },
-          { title: "Men in Black", year: "1997" },
-          { title: "Rush Hour", year: "1998" },
-          { title: "Kung Fu Hustle", year: "2004" },
-          { title: "Crouching Tiger, Hidden Dragon", year: "2000" },
-          { title: "Along with the Gods", year: "2017" },
-          { title: "Real Steel", year: "2011" },
-          { title: "I, Robot", year: "2004" },
-          { title: "The Terminator", year: "1984" },
-          { title: "Maze Runner", year: "2014" },
-          { title: "Guardians of the Galaxy", year: "2014" },
-          { title: "Planet of the Apes", year: "2011" },
-          { title: "Doctor Strange", year: "2016" },
-          { title: "Train to Busan", year: "2016" },
           { title: "Midnight Runners", year: "2017" },
-          { title: "Shang Chi and the Legend of the Ten Rings", year: "2021" },
-          { title: "The Wolverine", year: "2013" },
-          { title: "Spider-Man: Into the Spider-Verse", year: "2018" },
-          { title: "Spider-Man: Across the Spider-Verse", year: "2023" },
-          { title: "Fantastic 4", year: "2005" },
-          { title: "Pirates of the Caribbean", year: "2003" },
-          { title: "The Darkest Minds", year: "2018" },
-          { title: "The Truman Show", year: "1998" },
-          { title: "The Wizard of Oz", year: "1939" },
-          { title: "Inception", year: "2010" },
-          { title: "In Time", year: "2011" },
-          { title: "Us", year: "2019" },
-          { title: "The Martian", year: "2015" },
-          { title: "Passengers", year: "2016" },
-          { title: "The Hunger Games", year: "2012" },
-          { title: "Arrival", year: "2016" },
-          { title: "Overboard", year: "2018" },
-          { title: "The Proposal", year: "2009" },
-          { title: "Jumanji", year: "2017" },
-          { title: "Cast Away", year: "2000" },
-          { title: "The Devil Wears Prada", year: "2006" },
-          { title: "Freedom Writers", year: "2007" },
-          { title: "Bedtime Stories", year: "2008" },
-          { title: "The Emperor's New Groove", year: "2000" },
-          { title: "Ponyo", year: "2008" },
-          { title: "My Octopus Teacher", year: "2020" },
+          { title: "How to Lose a Guy in 10 Days", year: "2003" },
         ],
         shows: [
-          { title: "Modern Family", year: "2009-2020" },
-          { title: "Kim's Convenience", year: "2016-2022" },
-          { title: "Friends", year: "1994-2004" },
-          { title: "The Good Place", year: "2016-2020" },
-          { title: "The Office", year: "2005-2013" },
-          { title: "Alice in Borderland", year: "2020" },
-          { title: "Squid Game", year: "2021" },
-          { title: "Strong Woman Do Bong Soon", year: "2017" },
-          { title: "Naked and Afraid", year: "2013" },
-          { title: "Mythbusters", year: "2003" },
-          { title: "I Can See Your Voice", year: "2020" },
-          { title: "Young Sheldon", year: "2017" },
-          { title: "How It Works", year: "2012" },
-          {title: "Avatar: The Last Airbender", year: "2005-2008" },
+          { title: "Why Women Kill", description: "Watch season 1 not season 2" },
+          { title: "Modern Family", description: "You Know Why" },
+          { title: "One day at a time", description: "Noice comedy" },
+          { title: "House", description: "It's my comfort show, but I know it's not everyone's fave" },
         ],
-        creators: [
-          {
-            title: "Back 2 Basics Adventures",
-            description:
-              "Australian dude that does survival challenges and explains history of Australian areas in a storytelling kind of way(videos are typically 30 minutes to an hour long)",
-          },
-          {
-            title: "Tom Scott",
-            description:
-              "Brit dude explaining random interesting facts(videos are typically 3 to 6 minutes long)",
-          },
+        youtube: [
+          { title: "Matt Rife", description: "Controversial, but I love him" },
+          { title: "Back 2 Basics Adventures", description: "Australian dude that does survival challenges and explains history of Australian areas" },
+          { title: "Tom Scott", description: "Brit dude explaining random interesting facts" },
+          { title: "BetaSquad", description: "For giggles" },
         ],
       };
 
-      function renderJournalPrompts() {
-        const journalContent = document.getElementById("journal-content");
-        if (!journalContent) {
-          console.error("Journal content element not found");
-          return;
-        }
-        journalContent.innerHTML = '';
+      // DOM Elements
+      const header = document.getElementById('header');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuToggle = document.getElementById('menu-toggle');
+      const themeToggle = document.getElementById('theme-toggle');
+      const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+      const journalContent = document.getElementById('journal-content');
+      const mediaGrid = document.getElementById('media-grid');
 
-        journalPrompts.forEach((category) => {
-          const categoryCard = document.createElement("div");
-          categoryCard.className = "card";
-          categoryCard.style.marginBottom = "2rem";
+      // Initialize the application
+      document.addEventListener('DOMContentLoaded', function() {
+        initializeNavigation();
+        initializeThemeToggle();
+        initializeMusicPlayers();
+        initializeJournalPrompts();
+        initializeMediaGrid();
+        initializeScrollEffects();
+      });
 
-          let promptsHTML = "";
-          category.prompts.forEach((prompt) => {
-            promptsHTML += `<div class="prompt-card">${prompt}</div>`;
-          });
-
-          categoryCard.innerHTML = `
-          <div class="card-header">
-            <h3 class="card-title">${category.title}</h3>
-          </div>
-          <div class="card-content open">
-            ${promptsHTML}
-          </div>
-        `;
-
-          journalContent.appendChild(categoryCard);
-        });
-      }
-
-      function renderMediaLists() {
-        const mediaGrid = document.getElementById("media-grid");
-        if (!mediaGrid) {
-          console.error("Media grid element not found");
-          return;
-        }
-        mediaGrid.innerHTML = '';
-
-        // Content creators card
-        const creatorsCard = document.createElement("div");
-        creatorsCard.className = "media-card animated";
-
-        let creatorsHTML = `<h4>YouTube/Content Creators</h4><div class="media-list">`;
-        mediaLists.creators.forEach((item) => {
-          creatorsHTML += `
-          <div class="media-item">
-            <div><strong>${item.title}</strong><br>${item.description}</div>
-          </div>
-        `;
-        });
-        creatorsHTML += `</div>`;
-        creatorsCard.innerHTML = creatorsHTML;
-        mediaGrid.appendChild(creatorsCard);
-      }
-            // UI interaction functions
-      function setupNavigation() {
-        const header = document.getElementById("header");
-        const navLinks = document.querySelectorAll(".nav-link");
-        const mobileLinks = document.querySelectorAll(".mobile-link");
-        const menuToggle = document.getElementById("menu-toggle");
-        const mobileMenu = document.getElementById("mobile-menu");
-
-        // Header scroll effect
-        window.addEventListener("scroll", () => {
-          if (window.scrollY > 50) {
-            header.classList.add("scrolled");
-          } else {
-            header.classList.remove("scrolled");
-          }
-        });
-
-        // Active link highlighting
-        const sections = document.querySelectorAll("section");
-        
-        window.addEventListener("scroll", () => {
-          let current = "";
-          sections.forEach((section) => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.scrollY >= sectionTop - 200) {
-              current = section.getAttribute("id");
-            }
-          });
-
-          if (current) {
-            navLinks.forEach((link) => {
-              const href = link.getAttribute("href");
-              const sectionId = href ? href.replace("#", "") : null;
-              if (sectionId === current) {
-                link.classList.add("active");
-              } else {
-                link.classList.remove("active");
-              }
-            });
-
-            mobileLinks.forEach((link) => {
-              const href = link.getAttribute("href");
-              const sectionId = href ? href.replace("#", "") : null;
-              if (link.getAttribute("href") === `#${current}`) {
-                link.classList.add("active");
-              } else {
-                link.classList.remove("active");
-              }
-            });
-          }
-        });
-
+      // Navigation functionality
+      function initializeNavigation() {
         // Mobile menu toggle
-        if (menuToggle && mobileMenu) {
-          menuToggle.addEventListener("click", () => {
-            mobileMenu.classList.toggle("open");
-          });
-        }
+        menuToggle.addEventListener('click', function() {
+          mobileMenu.classList.toggle('open');
+        });
 
-        // Close mobile menu on link click
-        mobileLinks.forEach((link) => {
-          link.addEventListener("click", () => {
-            if (mobileMenu) {
-              mobileMenu.classList.remove("open");
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('.mobile-link, .nav-link').forEach(link => {
+          link.addEventListener('click', function(e) {
+            mobileMenu.classList.remove('open');
+            
+            // Handle smooth scrolling
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
             }
+            
+            // Update active states
+            updateActiveNavigation(targetId);
+          });
+        });
+
+        // Site title click to scroll to top
+        document.querySelector('.site-title').addEventListener('click', function(e) {
+          e.preventDefault();
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
           });
         });
       }
 
-      function setupTabs() {
-        const tabs = document.querySelectorAll(".tab");
-
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", () => {
-            const tabName = tab.getAttribute("data-tab");
-
-            // Update active tab
-            document.querySelectorAll(".tab").forEach((t) => {
-              t.classList.remove("active");
-            });
-            tab.classList.add("active");
-
-            // Show corresponding content
-            document.querySelectorAll(".tab-content").forEach((content) => {
-              content.classList.remove("active");
-            });
-            const tabContent = document.getElementById(`${tabName}-content`);
-            if (tabContent) {
-              tabContent.classList.add("active");
-            }
-          });
+      // Update active navigation states
+      function updateActiveNavigation(activeId) {
+        document.querySelectorAll('.nav-link, .mobile-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === activeId) {
+            link.classList.add('active');
+          }
         });
       }
 
-      function setupThemeToggle() {
-        const themeToggle = document.getElementById("theme-toggle");
-        const mobileThemeToggle = document.getElementById("mobile-theme-toggle");
+      // Theme toggle functionality
+      function initializeThemeToggle() {
+        const toggleButtons = [themeToggle, mobileThemeToggle];
         
-        // Check for saved theme preference or use system preference
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        let isDarkMode = localStorage.getItem("darkMode");
-        
-        // If no preference saved, use system preference
-        if (isDarkMode === null) {
-          isDarkMode = systemPrefersDark;
-        } else {
-          // Convert string to boolean
-          isDarkMode = isDarkMode === "true";
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          document.body.classList.add('dark-mode');
+          updateThemeIcons(true);
         }
 
-        // Set initial theme
-        setTheme(isDarkMode);
-
-        // Toggle function
-        function toggleTheme() {
-          isDarkMode = !document.body.classList.contains("dark-mode");
-          setTheme(isDarkMode);
-        }
-
-        // Apply theme function
-        function setTheme(darkMode) {
-          if (darkMode) {
-            document.body.classList.add("dark-mode");
-            localStorage.setItem("darkMode", "true");
-            updateThemeIcons(true);
-          } else {
-            document.body.classList.remove("dark-mode");
-            localStorage.setItem("darkMode", "false");
-            updateThemeIcons(false);
-          }
-        }
-
-        // Update icon function
-        function updateThemeIcons(isDark) {
-          const icon = isDark ? "sun" : "moon";
-          [themeToggle, mobileThemeToggle].forEach(button => {
-            if (button) {
-              button.innerHTML = `<i class="fas fa-${icon}"></i>`;
-            }
+        toggleButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            // Save theme preference
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcons(isDark);
           });
-        }
-
-        // Event listeners
-        if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
-        if (mobileThemeToggle) mobileThemeToggle.addEventListener("click", toggleTheme);
-
-        // Watch for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-          if (localStorage.getItem("darkMode") === null) {
-            setTheme(e.matches);
-          }
         });
       }
 
-      function setupMusicPlayerExclusivity() {
-        const musicButtons = document.querySelectorAll(".music-button");
-        const musicPlayers = document.querySelectorAll(".music-player");
+      function updateThemeIcons(isDark) {
+        const icons = document.querySelectorAll('.theme-toggle i');
+        icons.forEach(icon => {
+          icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        });
+      }
 
-        // Function to stop all YouTube videos
-        function stopAllVideos() {
-          musicPlayers.forEach((player) => {
-            const iframe = player.querySelector("iframe");
-            if (iframe) {
-              // This reloads the iframe, effectively stopping the video
-              iframe.src = iframe.src;
-            }
-          });
-        }
+      // Music player functionality
+      function initializeMusicPlayers() {
+        const musicButtons = document.querySelectorAll('.music-button');
+        const musicPlayers = document.querySelectorAll('.music-player');
 
-        musicButtons.forEach((button) => {
-          button.addEventListener("click", () => {
-            const playerId = button.getAttribute("data-player");
+        musicButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const playerType = this.getAttribute('data-player');
+            const targetPlayer = document.getElementById(`${playerType}-player`);
 
-            // First stop all videos
-            stopAllVideos();
+            // Remove active states from all buttons and players
+            musicButtons.forEach(btn => btn.classList.remove('active'));
+            musicPlayers.forEach(player => player.classList.remove('active'));
 
-            // Update active button
-            musicButtons.forEach((btn) => {
-              btn.classList.remove("active");
-            });
-            button.classList.add("active");
-
-            // Show corresponding player
-            musicPlayers.forEach((player) => {
-              player.classList.remove("active");
-            });
-            const playerElement = document.getElementById(`${playerId}-player`);
-            if (playerElement) {
-              playerElement.classList.add("active");
+            // Add active state to clicked button and corresponding player
+            this.classList.add('active');
+            if (targetPlayer) {
+              targetPlayer.classList.add('active');
             }
           });
         });
       }
 
-      function showFullStory(title, content) {
-        try {
-          const win = window.open('', '_blank');
-          if (!win) {
-            alert("Popup blocked! Please allow popups for this site to view the full story.");
-            return false;
+      // Journal prompts functionality
+      function initializeJournalPrompts() {
+        journalPrompts.forEach(category => {
+          const card = createJournalCard(category);
+          journalContent.appendChild(card);
+        });
+      }
+
+      function createJournalCard(category) {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const header = document.createElement('div');
+        header.className = 'card-header';
+        header.innerHTML = `
+          <h3 class="card-title">${category.title}</h3>
+          <i class="fas fa-chevron-down chevron-icon"></i>
+        `;
+
+        const content = document.createElement('div');
+        content.className = 'card-content';
+
+        category.prompts.forEach(prompt => {
+          const promptCard = document.createElement('div');
+          promptCard.className = 'prompt-card';
+          promptCard.innerHTML = `<p>${prompt}</p>`;
+          content.appendChild(promptCard);
+        });
+
+        card.appendChild(header);
+        card.appendChild(content);
+
+        // Add click event to toggle content
+        header.addEventListener('click', function() {
+          const isOpen = content.classList.contains('open');
+          content.classList.toggle('open');
+          
+          const chevron = header.querySelector('.chevron-icon');
+          chevron.classList.toggle('open');
+        });
+
+        return card;
+      }
+
+      // Media grid functionality
+      function initializeMediaGrid() {
+        // Create movie cards
+        mediaLists.movies.forEach(movie => {
+          const card = createMediaCard('Movie', movie.title, `Released: ${movie.year}`);
+          mediaGrid.appendChild(card);
+        });
+
+        // Create show cards
+        mediaLists.shows.forEach(show => {
+          const card = createMediaCard('TV Show', show.title, show.description);
+          mediaGrid.appendChild(card);
+        });
+
+        // Create YouTube channel cards
+        mediaLists.youtube.forEach(channel => {
+          const card = createMediaCard('YouTube', channel.title, channel.description);
+          mediaGrid.appendChild(card);
+        });
+      }
+
+      function createMediaCard(type, title, description) {
+        const card = document.createElement('div');
+        card.className = 'media-card';
+        card.innerHTML = `
+          <h4>${title}</h4>
+          <p><strong>${type}</strong></p>
+          <p>${description}</p>
+        `;
+        return card;
+      }
+
+      // Scroll effects
+      function initializeScrollEffects() {
+        window.addEventListener('scroll', function() {
+          const scrolled = window.scrollY > 50;
+          header.classList.toggle('scrolled', scrolled);
+
+          // Update active navigation based on scroll position
+          updateNavigationOnScroll();
+        });
+      }
+
+      function updateNavigationOnScroll() {
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPos = window.scrollY + 100;
+
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          const sectionId = section.getAttribute('id');
+
+          if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+            updateActiveNavigation(`#${sectionId}`);
           }
-
-          let decodedTitle = decodeEntities(title);
-          let decodedContent = decodeEntities(content);
-          decodedContent = decodedContent.replace(/\\n/g, '\n');
-  
-          win.document.write(`
-          <html>
-            <head>
-              <title>${decodedTitle}</title>
-              <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-              <style>
-                body {
-                  font-family: 'Poppins', sans-serif;
-                  line-height: 1.6;
-                  color: #3D405B;
-                  max-width: 800px;
-                  margin: 0 auto;
-                  padding: 2rem;
-                  background-color: #fffbf8;
-                  white-space: pre-line;
-                }
-                h1 {
-                  font-family: 'Playfair Display', serif;
-                  color: #a57456;
-                  margin-bottom: 1.5rem;
-                }
-                .content {
-                  white-space: pre-line;
-                }
-              </style>
-            </head>
-            <body>
-              <h1>${decodedTitle}</h1>
-              <div class="content">${decodedContent}</div>
-            </body>
-          </html>
-          `);
-          win.document.close();
-        } catch (error) {
-          console.error("Error opening story in new tab:", error);
-          alert("There was an error opening the story. Please try again.");
-        }
-        return false;
-      }  
-
-      function decodeEntities(text) {
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = text;
-        return textarea.value;
+        });
       }
+
+      // Add smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
           
-      function openEncodedStory(encodedTitle, encodedContent) {
-        try {
-          const title = decodeURIComponent(atob(encodedTitle));
-          const content = decodeURIComponent(atob(encodedContent));
-          return showFullStory(title, content);
-        } catch (error) {
-          console.error("Error decoding story:", error);
-          alert("There was an error opening the story. Please try again.");
-          return false;
-        }
-      }
-          
-      function initializeApp() {
-        console.log("Initializing app...");
-        renderLetters();
-        renderJournalPrompts();
-        renderFoodData();
-        renderAffirmations();
-        renderMediaLists();
-        setupNavigation();
-        setupTabs();
-        setupThemeToggle();
-        setupMusicPlayerExclusivity();
-      }
-
-      // Use only one event listener for initialization
-      document.addEventListener("DOMContentLoaded", initializeApp);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
     </script>
-
-    <!-- Back to Lobby Button -->
-    <div style="text-align: center; margin: 3rem 0;">
-      <a href="main.html" 
-         class="lobby-button"
-         style="
-          display: inline-block;
-          padding: 0.75rem 1.5rem;
-          background-color: var(--primary);
-          color: white;
-          text-decoration: none;
-          font-weight: 500;
-          border-radius: 0.5rem;
-          box-shadow: 0 4px 6px var(--shadow);
-          transition: all 0.3s ease;
-         "
-onmouseover="this.style.backgroundColor='var(--secondary)'; this.style.transform='translateY(-2px)'"
-onmouseout="this.style.backgroundColor='var(--primary)'; this.style.transform='translateY(0)'">
-        <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i>
-        Back to Lobby
-      </a>
-    </div>
   </body>
 </html>
