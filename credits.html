@@ -71,6 +71,12 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
+        .btn-group button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .credits-container {
             background-color: rgba(30, 30, 30, 0.8);
             border-radius: 10px;
@@ -135,6 +141,34 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
             background-color: #ffb74d;
+        }
+
+        /* Audio status indicator */
+        .audio-status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #ff9800;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .audio-status.show {
+            opacity: 1;
+        }
+
+        .audio-controls-container {
+            position: relative;
+        }
+
+        .loading-indicator {
+            display: none;
+            color: #ff9800;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .loading-indicator.show {
+            display: block;
         }
 
         /* Certificate Modal Styling */
@@ -253,19 +287,30 @@
     <div class="container">
         <div class="header">
             <h1 class="title animate__animated animate__bounce">Credits</h1>
-            <div class="audio-controls">
-                <p>Do you really want to read the credits?</p>
-                <div class="btn-group">
-                    <button id="yes-btn" class="btn btn-success">Yes</button>
-                    <button id="no-btn" class="btn btn-danger">No</button>
+            <div class="audio-controls-container">
+                <div class="audio-controls">
+                    <p>Do you really want to read the credits?</p>
+                    <div class="btn-group">
+                        <button id="yes-btn" class="btn btn-success">Yes</button>
+                        <button id="no-btn" class="btn btn-danger">No</button>
+                        <button id="stop-btn" class="btn btn-warning" style="display: none;">Stop Music</button>
+                    </div>
+                    <div class="loading-indicator" id="loading-indicator">Loading audio...</div>
+                    <div class="audio-status" id="audio-status"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Hidden YouTube iframe (audio only) -->
-        <div id="player-container" style="display: none;">
-            <div id="player"></div>
-        </div>
+        <!-- Hidden audio elements -->
+        <audio id="audio1" loop preload="metadata">
+            <source src="https://github.com/themaskedbandit1/lazyllamasretreat/raw/refs/heads/main/WhatsApp-Audio-2025-07-20-at-14.51.26.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        
+        <audio id="audio2" loop preload="metadata">
+            <source src="https://github.com/themaskedbandit1/lazyllamasretreat/raw/refs/heads/main/WhatsApp-Audio-2025-07-21-at-01.51.29.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
 
         <div class="credits-container">
             <div class="credits-scroll">
@@ -350,62 +395,37 @@
             // Elements
             const yesBtn = document.getElementById('yes-btn');
             const noBtn = document.getElementById('no-btn');
-            const playerContainer = document.getElementById('player-container');
+            const stopBtn = document.getElementById('stop-btn');
             const lastLine = document.getElementById('last-line');
             const creditsContainer = document.querySelector('.credits-container');
+            const audioStatus = document.getElementById('audio-status');
+            const loadingIndicator = document.getElementById('loading-indicator');
             
-            // YouTube API variables
-            let player;
-            let tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api";
-            let firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            // Audio elements
+            const audio1 = document.getElementById('audio1');
+            const audio2 = document.getElementById('audio2');
+            let currentAudioIndex = 0;
+            let isPlaying = false;
+            let currentAudio = null;
+            
+            // Audio files array for rotation
+            const audioFiles = [audio1, audio2];
             
             // Flag to track if user has scrolled to the bottom
             let hasReachedEnd = false;
             
-            // Initialize YouTube player when API is ready
-            window.onYouTubeIframeAPIReady = function() {
-                player = new YT.Player('player', {
-                    height: '0',  // Hidden video
-                    width: '0',   // Hidden video
-                    videoId: 'iuztXKx-sBo',  // Daði Freyr – Think About Things
-                    playerVars: {
-                        'autoplay': 0,
-                        'controls': 0,
-                        'showinfo': 0,
-                        'rel': 0,
-                        'fs': 0,
-                        'modestbranding': 1
-                    },
-                    events: {
-                        'onReady': onPlayerReady
-                    }
-                });
-            };
+            // Audio loading states
+            let audio1Loaded = false;
+            let audio2Loaded = false;
             
-            // Player is ready
-            function onPlayerReady(event) {
-                // Now the player is ready for action
-                yesBtn.addEventListener('click', function() {
-                    player.playVideo();
-                    // Change button states
-                    yesBtn.classList.add('active');
-                    noBtn.classList.remove('active');
-                    
-                    // Show success message
-                    showToast('Music started! Enjoy the credits!', 'success');
-                });
-                
-                noBtn.addEventListener('click', function() {
-                    player.pauseVideo();
-                    // Change button states
-                    noBtn.classList.add('active');
-                    yesBtn.classList.remove('active');
-                    
-                    // Show info message
-                    showToast('No music. Scroll through the credits in silence.', 'info');
-                });
+            // Function to show status message
+            function showStatus(message, isError = false) {
+                audioStatus.textContent = message;
+                audioStatus.style.color = isError ? '#ff6b6b' : '#ff9800';
+                audioStatus.classList.add('show');
+                setTimeout(() => {
+                    audioStatus.classList.remove('show');
+                }, 3000);
             }
             
             // Function to show toast notifications
@@ -452,6 +472,146 @@
                 });
             }
             
+            // Function to show/hide loading indicator
+            function setLoading(show) {
+                if (show) {
+                    loadingIndicator.classList.add('show');
+                } else {
+                    loadingIndicator.classList.remove('show');
+                }
+            }
+            
+            // Audio loading event handlers
+            audio1.addEventListener('loadeddata', function() {
+                audio1Loaded = true;
+                console.log('Audio 1 loaded successfully');
+            });
+            
+            audio2.addEventListener('loadeddata', function() {
+                audio2Loaded = true;
+                console.log('Audio 2 loaded successfully');
+            });
+            
+            audio1.addEventListener('error', function(e) {
+                console.error('Error loading audio 1:', e);
+                showStatus('Error loading audio file 1', true);
+            });
+            
+            audio2.addEventListener('error', function(e) {
+                console.error('Error loading audio 2:', e);
+                showStatus('Error loading audio file 2', true);
+            });
+            
+            // Function to play current audio
+            function playCurrentAudio() {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                }
+                
+                currentAudio = audioFiles[currentAudioIndex];
+                setLoading(true);
+                
+                // Check if audio is loaded
+                if (currentAudio.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+                    startPlayback();
+                } else {
+                    // Wait for audio to load
+                    const loadHandler = function() {
+                        startPlayback();
+                        currentAudio.removeEventListener('loadeddata', loadHandler);
+                    };
+                    currentAudio.addEventListener('loadeddata', loadHandler);
+                    
+                    // Timeout after 10 seconds
+                    setTimeout(() => {
+                        if (currentAudio.readyState < 2) {
+                            setLoading(false);
+                            showStatus('Audio loading timeout. Please try again.', true);
+                            currentAudio.removeEventListener('loadeddata', loadHandler);
+                        }
+                    }, 10000);
+                }
+            }
+            
+            function startPlayback() {
+                const playPromise = currentAudio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        setLoading(false);
+                        isPlaying = true;
+                        showStatus(`Playing audio ${currentAudioIndex + 1} (looping)`);
+                        stopBtn.style.display = 'inline-block';
+                        yesBtn.disabled = true;
+                        
+                        // Rotate to next audio for next play
+                        currentAudioIndex = (currentAudioIndex + 1) % audioFiles.length;
+                    }).catch((error) => {
+                        setLoading(false);
+                        console.error('Error playing audio:', error);
+                        showStatus('Could not play audio. Please try again.', true);
+                        
+                        // If autoplay is blocked, show user-friendly message
+                        if (error.name === 'NotAllowedError') {
+                            showStatus('Audio blocked by browser. Click Yes again to play.', true);
+                        }
+                    });
+                }
+            }
+            
+            // Function to stop all audio
+            function stopAllAudio() {
+                audioFiles.forEach(audio => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                });
+                isPlaying = false;
+                currentAudio = null;
+                stopBtn.style.display = 'none';
+                yesBtn.disabled = false;
+                showStatus('Audio stopped');
+            }
+            
+            // Yes button event handler
+            yesBtn.addEventListener('click', function() {
+                if (!isPlaying) {
+                    playCurrentAudio();
+                }
+            });
+            
+            // No button event handler
+            noBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    stopAllAudio();
+                }
+                showStatus('Maybe next time!');
+                
+                // Add a fun animation
+                yesBtn.classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(() => {
+                    yesBtn.classList.remove('animate__animated', 'animate__shakeX');
+                }, 1000);
+            });
+            
+            // Stop button event handler
+            stopBtn.addEventListener('click', function() {
+                stopAllAudio();
+            });
+            
+            // Audio ended event handlers (though loop should prevent this)
+            audioFiles.forEach((audio, index) => {
+                audio.addEventListener('ended', function() {
+                    console.log(`Audio ${index + 1} ended (should loop)`);
+                });
+                
+                audio.addEventListener('pause', function() {
+                    if (isPlaying && currentAudio === audio) {
+                        console.log(`Audio ${index + 1} paused`);
+                    }
+                });
+            });
+            
             // Function to check if scrolled to bottom
             function isScrolledToBottom() {
                 return creditsContainer.scrollHeight - creditsContainer.clientHeight <= creditsContainer.scrollTop + 50;
@@ -465,39 +625,30 @@
                     // Add special effect to the last line
                     lastLine.classList.add('animate__animated', 'animate__pulse');
                     
-                    // Show an initial hint
+                    // Show the original toast message
                     showToast('You made it to the end! Click on the last line for a surprise!', 'success');
                 }
             });
             
-            // Easter egg - Certificate modal
+            // Secret certificate trigger (backup method by clicking)
             lastLine.addEventListener('click', function() {
                 if (hasReachedEnd) {
                     const certificateModal = new bootstrap.Modal(document.getElementById('certificateModal'));
                     certificateModal.show();
+                } else {
+                    showStatus('Scroll to the very bottom first!');
                 }
             });
             
-            // Add some fun animations to credits lines while scrolling
-            const creditLines = document.querySelectorAll('.credits-scroll p');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.transform = 'translateX(0)';
-                        entry.target.style.opacity = '1';
-                    } else {
-                        entry.target.style.transform = entry.target.getBoundingClientRect().top > 0 ? 
-                            'translateX(-20px)' : 'translateX(20px)';
-                        entry.target.style.opacity = '0.5';
-                    }
-                });
-            }, { threshold: 0.5 });
+            // Preload audio files
+            setTimeout(() => {
+                audio1.load();
+                audio2.load();
+            }, 1000);
             
-            creditLines.forEach(line => {
-                line.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
-                line.style.opacity = '0.5';
-                line.style.transform = 'translateX(-20px)';
-                observer.observe(line);
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', function() {
+                stopAllAudio();
             });
         });
     </script>
