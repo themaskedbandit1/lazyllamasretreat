@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Three delicious chocolate recipes with personal notes and variations">
+    <meta name="author" content="Recipe Collection">
+    <meta property="og:title" content="Chocolate Recipe Collection">
+    <meta property="og:description" content="Three amazing chocolate recipes: Smoothie, Brownie in a Mug, and Mug Cake">
+    <meta property="og:type" content="website">
+    <title>Chocolate Recipe Collection</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #2c1810;
+            background: linear-gradient(135deg, #f5f3f0 0%, #ede7e0 100%);
+            min-height: 100vh;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, #8b4513 0%, #6b3410 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+            position: relative;
+        }
+
+        .header-nav {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateX(-3px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main content container */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Recipe card styles */
+        .recipe {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .recipe:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-header {
+            background: linear-gradient(135deg, #d2b48c 0%, #c8a882 100%);
+            padding: 1.5rem;
+            border-bottom: 3px solid #8b4513;
+        }
+
+        .recipe-title {
+            font-size: 1.8rem;
+            color: #2c1810;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .recipe-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #5d4e37;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* Recipe content */
+        .recipe-content {
+            padding: 2rem;
+        }
+
+        .recipe-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #8b4513;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            border-bottom: 2px solid #d2b48c;
+            padding-bottom: 0.3rem;
+        }
+
+        /* Ingredients list */
+        .ingredients {
+            background: #faf8f5;
+            border-radius: 8px;
+            padding: 1.2rem;
+            border-left: 4px solid #8b4513;
+        }
+
+        .ingredients ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredients li {
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .ingredients li:before {
+            content: "🍫";
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+        }
+
+        /* Instructions */
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .instructions li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Personal notes */
+        .personal-notes {
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3d0 100%);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+            border: 2px dashed #dcc48a;
+            position: relative;
+        }
+
+        .personal-notes:before {
+            content: "💭 Personal Notes";
+            position: absolute;
+            top: -12px;
+            left: 1rem;
+            background: #fff8e1;
+            padding: 0 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #8b4513;
+        }
+
+        .personal-notes p {
+            font-style: italic;
+            color: #5d4e37;
+            line-height: 1.6;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .recipe-meta {
+                justify-content: center;
+            }
+
+            .recipe-content {
+                padding: 1.5rem;
+            }
+
+            main {
+                margin: 1rem auto;
+            }
+
+            .header-nav {
+                top: 0.5rem;
+                left: 0.5rem;
+            }
+
+            .back-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            header {
+                background: #8b4513;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+
+            .recipe {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 2rem;
+            }
+
+            .recipe:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .personal-notes {
+                background: #f9f9f9;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            .recipe {
+                transition: none;
+            }
+
+            .recipe:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-nav">
+            <a href="llbdaypackage.html" class="back-button">← Back</a>
+        </div>
+        <h1>🍫 Chocolate Recipe Collection</h1>
+        <p class="subtitle">Three delicious chocolate treats to satisfy your cravings</p>
+    </header>
+
+    <main>
+        <!-- Recipe 1: Chocolate Smoothie -->
+        <article class="recipe">
+            <div class="recipe-header">
+                <h2 class="recipe-title">Chocolate Smoothie</h2>
+                <div class="recipe-meta">
+                    <span class="meta-item">⏱️ Prep: 5 minutes</span>
+                    <span class="meta-item">🔥 Cook: N/A</span>
+                    <span class="meta-item">🍽️ Serves: 1</span>
+                </div>
+            </div>
+            <div class="recipe-content">
+                <section class="recipe-section">
+                    <h3 class="section-title">Ingredients</h3>
+                    <div class="ingredients">
+                        <ul>
+                            <li>2 frozen bananas</li>
+                            <li>2 cups milk</li>
+                            <li>1 tablespoon peanut butter</li>
+                            <li>2 tablespoons cocoa powder</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="recipe-section">
+                    <h3 class="section-title">Instructions</h3>
+                    <div class="instructions">
+                        <ol>
+                            <li>Add all ingredients to a blender</li>
+                            <li>Blend until smooth</li>
+                            <li>Serve immediately</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <div class="personal-notes">
+                    <p>I usually do 1 frozen banana and 1 cup milk and add like a teaspoon or two of honey but the og recipe is as above except she sometimes adds a date sometimes but that.....is too much effort (I have to soak the date first before I can blend it but I have the patience of a four year old). Sometimes I do the og recipe as well, but I swear it's so creamy it literally knocks me out after I drink it. Or my body just adapted to surviving society by making it super easy to fall asleep whenever I do mundane things.</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Recipe 2: Brownie in a Mug -->
+        <article class="recipe">
+            <div class="recipe-header">
+                <h2 class="recipe-title">Brownie in a Mug</h2>
+                <div class="recipe-meta">
+                    <span class="meta-item">⏱️ Prep: 2 minutes</span>
+                    <span class="meta-item">🔥 Cook: 1 minute</span>
+                    <span class="meta-item">🍽️ Serves: 1</span>
+                </div>
+            </div>
+            <div class="recipe-content">
+                <section class="recipe-section">
+                    <h3 class="section-title">Ingredients</h3>
+                    <div class="ingredients">
+                        <ul>
+                            <li>3 tablespoons granulated sugar</li>
+                            <li>3 tablespoons all-purpose flour</li>
+                            <li>1½ tablespoons unsweetened cocoa powder</li>
+                            <li>Pinch of salt</li>
+                            <li>2 tablespoons chocolate chips (plus more for topping)</li>
+                            <li>1½ tablespoons vegetable oil, melted coconut oil, or melted butter</li>
+                            <li>3 tablespoons milk</li>
+                            <li>¼ teaspoon vanilla extract</li>
+                            <li><strong>Optional toppings:</strong> ice cream, whipped cream, powdered sugar, berries</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="recipe-section">
+                    <h3 class="section-title">Instructions</h3>
+                    <div class="instructions">
+                        <ol>
+                            <li>In a microwave-safe mug, combine the sugar, flour, cocoa powder, and salt. Stir until well mixed and free of lumps.</li>
+                            <li>Add the chocolate chips and stir to distribute evenly.</li>
+                            <li>Pour in the oil, milk, and vanilla extract. Stir until just combined, being careful not to overmix.</li>
+                            <li>Sprinkle a few additional chocolate chips on top.</li>
+                            <li>Microwave on high for 60 seconds. Check for doneness; if the brownie is still undercooked, continue microwaving in 10-second intervals until done.</li>
+                            <li>Allow to cool slightly before enjoying. Top with your choice of ice cream, whipped cream, powdered sugar, or berries if desired.</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <div class="personal-notes">
+                    <p>P.S. I personally do not use so many chocolate chips because I feel like that measurement's not feasible in this economy and also diabetes is in my family so YARRRR, but it's up to you.</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Recipe 3: Chocolate Mug Cake -->
+        <article class="recipe">
+            <div class="recipe-header">
+                <h2 class="recipe-title">Chocolate Mug Cake</h2>
+                <div class="recipe-meta">
+                    <span class="meta-item">⏱️ Prep: idk</span>
+                    <span class="meta-item">🔥 Cook: 1 minute</span>
+                    <span class="meta-item">🍽️ Serves: 1</span>
+                </div>
+            </div>
+            <div class="recipe-content">
+                <section class="recipe-section">
+                    <h3 class="section-title">Ingredients</h3>
+                    <div class="ingredients">
+                        <ul>
+                            <li>2 tablespoons flour</li>
+                            <li>2 tablespoons cocoa</li>
+                            <li>2 tablespoons sugar</li>
+                            <li>1/4 teaspoon baking powder</li>
+                            <li>1/8 teaspoon salt</li>
+                            <li>1 tablespoon oil</li>
+                            <li>3 tablespoons milk</li>
+                            <li>1/2 teaspoon vanilla essence</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="recipe-section">
+                    <h3 class="section-title">Instructions</h3>
+                    <div class="instructions">
+                        <ol>
+                            <li>In a microwave-safe mug, mix together the dry ingredients till the powder turns an even brown colour.</li>
+                            <li>Then pour in the wet ingredients and mix so that there are no lumps.</li>
+                            <li>Put in the microwave for 30-40 seconds.</li>
+                        </ol>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer style="text-align: center; padding: 2rem; color: #8b4513; font-style: italic;">
+        Made with ❤️ and lots of chocolate cravings
+    </footer>
+</body>
+</html>
